@@ -1,27 +1,53 @@
 import axios from "axios";
 
-const API_USER_URL = "/api/users";
+const API_BASE_URL = "/api";
 
-export const displayText = (tabId: string) => {
+export const selectTab = async (tabId: string) => {
   if (tabId === "nav-doctor-tab") {
-    return getAllUsersByRole("doctor");
-  }
-  if (tabId === "nav-pharmacist-tab") {
-    return getAllUsersByRole("pharmacist");
-  }
-  if (tabId === "nav-customer-tab") {
-    return getAllUsersByRole("customer");
+    return await getAllUsersByRole("doctor");
+  } else if (tabId === "nav-pharmacist-tab") {
+    return await getAllUsersByRole("pharmacist");
+  } else if (tabId === "nav-customer-tab") {
+    return await getAllUsersByRole("customer");
+  } else if (tabId === "nav-medicine-tab") {
+    return await getAllMTCs("medicine");
+  } else if (tabId === "nav-treatment-tab") {
+    return await getAllMTCs("treatment");
+  } else if (tabId === "nav-comestic-tab") {
+    return await getAllMTCs("comestic");
   }
   return null;
 };
 
-// Hàm fetch data từ API
 const getAllUsersByRole = async (role: string) => {
   try {
-    const response = await axios.get(`${API_USER_URL}/getAll/${role}`);
+    const response = await axios.get(`${API_BASE_URL}/users/getAll/${role}`);
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
     return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
-    return "Lỗi tải dữ liệu";
+    return [];
+  }
+};
+
+// medicine, treatment, cosmetic
+const getAllMTCs = async (type: string) => {
+  try {
+    let response;
+
+    if (type === "medicine") {
+      response = await axios.get(`${API_BASE_URL}/medicine/getAll`);
+    } else if (type === "treatment") {
+      response = await axios.get(`${API_BASE_URL}/treatment/getAll`);
+    } else {
+      response = await axios.get(`${API_BASE_URL}/comestic/getAll`);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return [];
   }
 };

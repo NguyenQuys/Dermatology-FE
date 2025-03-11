@@ -1,15 +1,78 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as utils from "./Display";
+import DataTable from "./DataTable";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState<string>("");
-  const [data, setData] = useState<any>(null); // Lưu trữ dữ liệu từ API
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleTabClick = async (tabId: string) => {
+    if (activeTab === tabId) return;
     setActiveTab(tabId);
+    setLoading(true);
+    setData(null);
 
-    let users = await utils.displayText(tabId);
-    setData(users);
+    try {
+      const entities = await utils.selectTab(tabId);
+      setData(entities);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const userColumns = [
+    {
+      header: "STT",
+      accessor: "index",
+      render: (_: any, item: any, index: number) => index + 1,
+    },
+    { header: "Họ tên", accessor: "name" },
+    { header: "Email", accessor: "email" },
+    {
+      header: "Trạng thái",
+      accessor: "status",
+      render: (value: string) =>
+        value === "active" ? "Đang hoạt động" : "Không hoạt động",
+    },
+  ];
+
+  const mtcColumns = [
+    {
+      header: "STT",
+      accessor: "index",
+      render: (_: any, item: any, index: number) => index + 1,
+    },
+    { header: "Tên", accessor: "name" },
+    { header: "Phân loại", accessor: "category" },
+    { header: "Giá", accessor: "price" },
+    { header: "Số lượng", accessor: "quantity" },
+    {
+      header: "Trạng thái",
+      accessor: "isHidden",
+      render: (value: boolean) =>
+        value ? "Đang hoạt động" : "Không hoạt động",
+    },
+  ];
+
+  const actions = (item: any) => (
+    <button className="btn btn-primary">Chi tiết</button>
+  );
+
+  const getColumns = () => {
+    if (
+      ["nav-doctor-tab", "nav-pharmacist-tab", "nav-customer-tab"].includes(
+        activeTab
+      )
+    ) {
+      return userColumns;
+    }
+    if (activeTab === "nav-comestic-tab") {
+      return mtcColumns;
+    }
+    return userColumns; // default
   };
 
   return (
@@ -62,34 +125,62 @@ function Sidebar() {
           <li className="nav-item nav-category">Thuốc - Trị liệu - Mỹ phẩm</li>
 
           <li className="nav-item">
-            <a className="nav-link" href="#">
-              <i className="menu-icon mdi mdi-card-text-outline"></i>
+            <a
+              className={`nav-link ${
+                activeTab === "nav-medicine-tab" ? "bg-primary text-white" : ""
+              }`}
+              href="#"
+              onClick={() => handleTabClick("nav-medicine-tab")}
+            >
+              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Thuốc</span>
             </a>
           </li>
 
           <li className="nav-item">
-            <a className="nav-link" href="#">
-              <i className="menu-icon mdi mdi-card-text-outline"></i>
+            <a
+              className={`nav-link ${
+                activeTab === "nav-treatment-tab" ? "bg-primary text-white" : ""
+              }`}
+              href="#"
+              onClick={() => handleTabClick("nav-treatment-tab")}
+            >
+              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Trị liệu</span>
             </a>
           </li>
 
           <li className="nav-item">
-            <a className="nav-link" href="#">
-              <i className="menu-icon mdi mdi-card-text-outline"></i>
+            <a
+              className={`nav-link ${
+                activeTab === "nav-comestic-tab" ? "bg-primary text-white" : ""
+              }`}
+              href="#"
+              onClick={() => handleTabClick("nav-comestic-tab")}
+            >
+              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Mỹ phẩm</span>
             </a>
           </li>
         </ul>
       </nav>
-
-      <div>
-        {activeTab === "nav-doctor-tab" && data ? (
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        ) : (
-          utils.displayText(activeTab)
-        )}
+      <div className="container p-3">
+        <div className="col-lg-12">
+          <button
+            type="button"
+            className="btn btn-primary"
+            id="btn_add_product"
+            data-bs-toggle="modal"
+          >
+            Thêm
+          </button>
+        </div>
+        <DataTable
+          columns={getColumns() as any}
+          data={data || []}
+          loading={loading}
+          actions={actions}
+        />
       </div>
     </>
   );
