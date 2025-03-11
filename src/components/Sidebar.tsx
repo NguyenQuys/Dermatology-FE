@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as utils from "./Display";
 import DataTable from "./DataTable";
+import AddButton from "./AddButton";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState<string>("");
@@ -39,7 +40,7 @@ function Sidebar() {
     },
   ];
 
-  const mtcColumns = [
+  const comesticColumns = [
     {
       header: "STT",
       accessor: "index",
@@ -57,6 +58,27 @@ function Sidebar() {
     },
   ];
 
+  const medicineColumns = [
+    {
+      header: "STT",
+      accessor: "index",
+      render: (_: any, item: any, index: number) => index + 1,
+    },
+    { header: "Tên", accessor: "name" },
+    { header: "Giá", accessor: "price" },
+    { header: "Số lượng", accessor: "quantity" },
+  ];
+
+  const treatmentColumns = [
+    {
+      header: "STT",
+      accessor: "index",
+      render: (_: any, item: any, index: number) => index + 1,
+    },
+    { header: "Tên", accessor: "name" },
+    { header: "Giá", accessor: "price" },
+  ];
+
   const actions = (item: any) => (
     <button className="btn btn-primary">Chi tiết</button>
   );
@@ -68,10 +90,14 @@ function Sidebar() {
       )
     ) {
       return userColumns;
+    } else if (activeTab === "nav-comestic-tab") {
+      return comesticColumns;
+    } else if (activeTab === "nav-medicine-tab") {
+      return medicineColumns;
+    } else if (activeTab === "nav-treatment-tab") {
+      return treatmentColumns;
     }
-    if (activeTab === "nav-comestic-tab") {
-      return mtcColumns;
-    }
+
     return userColumns; // default
   };
 
@@ -166,14 +192,7 @@ function Sidebar() {
       </nav>
       <div className="container p-3">
         <div className="col-lg-12">
-          <button
-            type="button"
-            className="btn btn-primary"
-            id="btn_add_product"
-            data-bs-toggle="modal"
-          >
-            Thêm
-          </button>
+          <AddButton />
         </div>
         <DataTable
           columns={getColumns() as any}
