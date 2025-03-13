@@ -1,12 +1,26 @@
 import React from "react";
 
+interface Row {
+  header: string;
+  accessor: string;
+  type: "text" | "number" | "email" | "password";
+}
+
 interface ModalProps {
+  rows: Row[];
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  type: string;
 }
 
-function Modal({ isOpen, onClose, title }: ModalProps) {
+const Modal: React.FC<ModalProps> = ({
+  rows = [],
+  isOpen,
+  onClose,
+  title,
+  type,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -31,24 +45,55 @@ function Modal({ isOpen, onClose, title }: ModalProps) {
           </div>
           <div className="modal-body">
             <form>
-              <div className="mb-3">
-                <label htmlFor="name" className="form-label">
-                  Tên
-                </label>
-                <input type="text" className="form-control" id="name" />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="price" className="form-label">
-                  Giá
-                </label>
-                <input type="number" className="form-control" id="price" />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="quantity" className="form-label">
-                  Số lượng
-                </label>
-                <input type="number" className="form-control" id="quantity" />
-              </div>
+              {(() => {
+                if (rows.length === 0) {
+                  return <p>Không có dữ liệu để hiển thị</p>;
+                }
+
+                if (type === "comestic") {
+                  return (
+                    <>
+                      {rows.map((row, index) => (
+                        <div className="mb-3" key={index}>
+                          <label htmlFor={row.accessor} className="form-label">
+                            {row.header}
+                          </label>
+                          <input
+                            type={row.type}
+                            className="form-control"
+                            id={row.accessor}
+                            required
+                          />
+                        </div>
+                      ))}
+                      <label htmlFor="category" className="form-label">
+                        Phân loại
+                      </label>
+                      <select className="form-control">
+                        <option value="" selected disabled>
+                          Chọn phân loại
+                        </option>
+                        <option value="cleanser">Sữa rửa mặt</option>
+                        <option value="makeup_remover">Tẩy trang</option>
+                        <option value="mask">Mặt nạ</option>
+                      </select>
+                    </>
+                  );
+                }
+
+                return rows.map((row, index) => (
+                  <div className="mb-3" key={index}>
+                    <label htmlFor={row.accessor} className="form-label">
+                      {row.header}
+                    </label>
+                    <input
+                      type={row.type}
+                      className="form-control"
+                      id={row.accessor}
+                    />
+                  </div>
+                ));
+              })()}
             </form>
           </div>
           <div className="modal-footer">
@@ -67,6 +112,6 @@ function Modal({ isOpen, onClose, title }: ModalProps) {
       </div>
     </div>
   );
-}
+};
 
 export default Modal;

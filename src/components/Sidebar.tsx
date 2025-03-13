@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as services from "../service/api";
+import * as services from "../api/general.api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
 
@@ -186,7 +186,9 @@ function Sidebar() {
       </nav>
       <div className="container p-3">
         <div className="col-lg-12">
-          <AddButton />
+          {activeTab !== "nav-customer-tab" ? (
+            <AddButton type={activeTab} />
+          ) : null}
         </div>
         <DataTable
           columns={getColumns() as any}
