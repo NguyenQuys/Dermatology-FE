@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as utils from "./Display";
+import * as services from "../service/api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
 
@@ -15,7 +15,7 @@ function Sidebar() {
     setData(null);
 
     try {
-      const entities = await utils.selectTab(tabId);
+      const entities = await services.selectTab(tabId);
       setData(entities);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -115,7 +115,6 @@ function Sidebar() {
               href="#"
               onClick={() => handleTabClick("nav-doctor-tab")}
             >
-              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Bác sĩ</span>
             </a>
           </li>
@@ -130,7 +129,6 @@ function Sidebar() {
               href="#"
               onClick={() => handleTabClick("nav-pharmacist-tab")}
             >
-              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Dược sĩ</span>
             </a>
           </li>
@@ -143,7 +141,6 @@ function Sidebar() {
               href="#"
               onClick={() => handleTabClick("nav-customer-tab")}
             >
-              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Khách hàng</span>
             </a>
           </li>
@@ -158,7 +155,6 @@ function Sidebar() {
               href="#"
               onClick={() => handleTabClick("nav-medicine-tab")}
             >
-              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Thuốc</span>
             </a>
           </li>
@@ -171,7 +167,6 @@ function Sidebar() {
               href="#"
               onClick={() => handleTabClick("nav-treatment-tab")}
             >
-              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Trị liệu</span>
             </a>
           </li>
@@ -184,7 +179,6 @@ function Sidebar() {
               href="#"
               onClick={() => handleTabClick("nav-comestic-tab")}
             >
-              <i className="menu-icon mdi mdi-floor-plan"></i>
               <span className="menu-title">Mỹ phẩm</span>
             </a>
           </li>
