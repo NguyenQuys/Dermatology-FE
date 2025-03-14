@@ -8,13 +8,12 @@ export const getAllTreatments = async () => {
     return response;
 };
 
-export const addTreatment = async (treatment: Treatment) => {
+export const addTreatment = async (treatment: Treatment): Promise<string> => {
     try {
         const response = await axios.post(`${API_TREATMENT_URL}/add`, treatment);
-        return response;
-    } catch (error) {
-        console.error("Error adding treatment:", error);
-        return [];
+        return response.data.message;
+    } catch (error: any) {
+        return error.response?.data?.message || "Đã xảy ra lỗi!";
     }
 }
 

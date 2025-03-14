@@ -3,11 +3,12 @@ import Modal from "./Modal";
 
 interface AddButtonProps {
   type: string;
+  handleTabClick: (tabId: string) => void;
 }
 
 export let assignTypeSideBar = "";
 
-export const AddButton: React.FC<AddButtonProps> = ({ type }) => {
+const AddButton: React.FC<AddButtonProps> = ({ type, handleTabClick }) => {
   let typeSideBar = (type: String) => {
     switch (type) {
       case "nav-customer-tab":
@@ -80,6 +81,7 @@ export const AddButton: React.FC<AddButtonProps> = ({ type }) => {
         onClose={handleCloseModal}
         title="Thêm mới"
         typeModal={typeSideBar(type)}
+        handleTabClick={handleTabClick} // Truyền hàm này vào Modal
       />
     </>
   );

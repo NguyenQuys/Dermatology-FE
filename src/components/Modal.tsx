@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { addTreatment } from "../api/treatment.api";
+import { addComestic } from "../api/comestic.api";
 import { Treatment } from "../models/treatment.model";
 import { assignTypeSideBar } from "./AddButton";
 import * as showNotification from "../utils/toast.util";
+import { Comestic } from "../models/comestic.model";
+import { Medicine } from "../models/medicine.model";
+import { addMedicine } from "../api/medicine.api";
+import { User } from "../models/user.model";
+import { addUser } from "../api/user.api";
 
 interface Row {
   header: string;
@@ -16,6 +22,7 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   typeModal: string;
+  handleTabClick: (tabId: string) => void;
 }
 
 let Modal: React.FC<ModalProps> = ({
@@ -24,8 +31,10 @@ let Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   typeModal,
+  handleTabClick,
 }) => {
   if (!isOpen) return null;
+  let assignedTabId = "";
 
   const initialFormData = rows.reduce(
     (acc, row) => ({ ...acc, [row.accessor]: row.type === "number" ? 0 : "" }),
@@ -34,6 +43,7 @@ let Modal: React.FC<ModalProps> = ({
 
   const [formData, setFormData] = useState(initialFormData);
   const [category, setCategory] = useState("");
+  const [gender, setGender] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   // Xử lý thay đổi dữ liệu nhập
@@ -49,25 +59,60 @@ let Modal: React.FC<ModalProps> = ({
     setCategory(e.target.value);
   };
 
+  const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setGender(e.target.value);
+  };
+
+  // Đổi từ typeModal sang tabId
+  if (typeModal === "comestic") {
+    assignedTabId = "nav-comestic-tab";
+  } else if (typeModal === "treatment") {
+    assignedTabId = "nav-treatment-tab";
+  } else if (typeModal === "medicine") {
+    assignedTabId = "nav-medicine-tab";
+  } else if (typeModal === "doctor") {
+    assignedTabId = "nav-doctor-tab";
+  } else if (typeModal === "pharmacist") {
+    assignedTabId = "nav-pharmacist-tab";
+  } else if (typeModal === "customer") {
+    assignedTabId = "nav-customer-tab";
+  }
+
   const handleSave = async () => {
     setError(null);
 
     typeModal = assignTypeSideBar;
+
     try {
       const dataToSend = {
         ...formData,
       };
 
-      if (typeModal === "comestic" && category) {
-        dataToSend.type = category;
+      let response = "";
+
+      if (typeModal === "comestic") {
+        dataToSend.category = category;
+        response = await addComestic(dataToSend as unknown as Comestic);
+      } else if (typeModal === "treatment") {
+        response = await addTreatment(dataToSend as unknown as Treatment);
+      } else if (typeModal === "medicine") {
+        response = await addMedicine(dataToSend as unknown as Medicine);
+      } else if (
+        typeModal === "doctor" ||
+        typeModal === "pharmacist" ||
+        typeModal === "customer"
+      ) {
+        dataToSend.role = typeModal;
+        dataToSend.gender = gender;
+        response = await addUser(dataToSend as unknown as User);
       }
 
-      //await addTreatment(dataToSend as unknown as Treatment);
-      showNotification.showErrorToast("Lưu thành công!");
-
-      onClose();
+      showNotification.showSuccessToast(response);
     } catch (error) {
-      setError("Có lỗi xảy ra! Vui lòng thử lại.");
+      showNotification.showErrorToast(error as string);
+    } finally {
+      onClose();
+      handleTabClick(assignedTabId); // Gọi hàm từ Sidebar
     }
   };
 
@@ -134,6 +179,49 @@ let Modal: React.FC<ModalProps> = ({
                           <option value="cleanser">Sữa rửa mặt</option>
                           <option value="makeup_remover">Tẩy trang</option>
                           <option value="mask">Mặt nạ</option>
+                        </select>
+                      </div>
+                    </>
+                  );
+                } else if (
+                  typeModal === "doctor" ||
+                  typeModal === "pharmacist" ||
+                  typeModal === "customer"
+                ) {
+                  return (
+                    <>
+                      {rows.map((row, index) => (
+                        <div className="mb-3" key={index}>
+                          <label htmlFor={row.accessor} className="form-label">
+                            {row.header}
+                          </label>
+                          <input
+                            type={row.type}
+                            className="form-control"
+                            id={row.accessor}
+                            value={formData[row.accessor] || ""}
+                            onChange={handleInputChange}
+                            required
+                          />
+                        </div>
+                      ))}
+                      <div className="mb-3">
+                        <label htmlFor="gender" className="form-label">
+                          Giới tính
+                        </label>
+                        <select
+                          className="form-control"
+                          id="gender"
+                          value={gender}
+                          onChange={handleGenderChange}
+                          required
+                        >
+                          <option value="" disabled>
+                            Chọn giới tính
+                          </option>
+                          <option value="male">Nam</option>
+                          <option value="female">Nữ</option>
+                          <option value="other">Khác</option>
                         </select>
                       </div>
                     </>

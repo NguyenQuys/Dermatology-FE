@@ -23,8 +23,7 @@ export const selectTab = async (tabId: string) => {
   return null;
 };
 
-// medicine, treatment, cosmetic
-const getAll = async (type: string) => {
+export const getAll = async (type: string) => {
   try {
     let response;
 

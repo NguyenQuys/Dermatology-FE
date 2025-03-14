@@ -9,7 +9,7 @@ function Sidebar() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleTabClick = async (tabId: string) => {
-    if (activeTab === tabId) return;
+    //if (activeTab === tabId) return;
     setActiveTab(tabId);
     setLoading(true);
     setData(null);
@@ -186,16 +186,23 @@ function Sidebar() {
       </nav>
       <div className="container p-3">
         <div className="col-lg-12">
-          {activeTab !== "nav-customer-tab" ? (
-            <AddButton type={activeTab} />
-          ) : null}
+          {activeTab !== "" ? (
+            activeTab !== "nav-customer-tab" ? (
+              <AddButton type={activeTab} handleTabClick={handleTabClick} />
+            ) : null
+          ) : (
+            <h1>Vui lòng chọn tab để hiển thị</h1>
+          )}
         </div>
-        <DataTable
-          columns={getColumns() as any}
-          data={data || []}
-          loading={loading}
-          actions={actions}
-        />
+
+        {activeTab !== "" && (
+          <DataTable
+            columns={getColumns() as any}
+            data={data || []}
+            loading={loading}
+            actions={actions}
+          />
+        )}
       </div>
     </>
   );
