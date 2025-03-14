@@ -5,28 +5,30 @@ interface AddButtonProps {
   type: string;
 }
 
-const AddButton: React.FC<AddButtonProps> = ({ type }) => {
-  let typeSideBar = () => {
+export let assignTypeSideBar = "";
+
+export const AddButton: React.FC<AddButtonProps> = ({ type }) => {
+  let typeSideBar = (type: String) => {
     switch (type) {
       case "nav-customer-tab":
-        return "customer";
+        return (assignTypeSideBar = "customer");
       case "nav-doctor-tab":
-        return "doctor";
+        return (assignTypeSideBar = "doctor");
       case "nav-pharmacist-tab":
-        return "pharmacist";
+        return (assignTypeSideBar = "pharmacist");
       case "nav-comestic-tab":
-        return "comestic";
+        return (assignTypeSideBar = "comestic");
       case "nav-medicine-tab":
-        return "medicine";
+        return (assignTypeSideBar = "medicine");
       case "nav-treatment-tab":
-        return "treatment";
+        return (assignTypeSideBar = "treatment");
       default:
         return "";
     }
   };
 
   const getRows = () => {
-    switch (typeSideBar()) {
+    switch (assignTypeSideBar) {
       case "pharmacist":
       case "doctor":
         return [
@@ -77,7 +79,7 @@ const AddButton: React.FC<AddButtonProps> = ({ type }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Thêm mới"
-        type={typeSideBar()}
+        typeModal={typeSideBar(type)}
       />
     </>
   );
