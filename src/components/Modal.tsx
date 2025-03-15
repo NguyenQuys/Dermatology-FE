@@ -8,7 +8,7 @@ import { Comestic } from "../models/comestic.model";
 import { Medicine } from "../models/medicine.model";
 import { addMedicine } from "../api/medicine.api";
 import { User } from "../models/user.model";
-import { addUser } from "../api/user.api";
+import UserAPI from "../api/user.api";
 
 interface Row {
   header: string;
@@ -104,7 +104,7 @@ let Modal: React.FC<ModalProps> = ({
       ) {
         dataToSend.role = typeModal;
         dataToSend.gender = gender;
-        response = await addUser(dataToSend as unknown as User);
+        response = await UserAPI.addUser(dataToSend as unknown as User);
       }
 
       showNotification.showSuccessToast(response);

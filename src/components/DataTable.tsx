@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import DetailButton from "./DetailButton";
 
 interface Column {
   header: string;
@@ -10,7 +11,7 @@ interface DataTableProps {
   columns: Column[];
   data: any[];
   loading?: boolean;
-  actions?: (item: any) => React.ReactNode;
+  actions?: (item: any) => React.ReactNode; // cho nut detail
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -19,6 +20,17 @@ const DataTable: React.FC<DataTableProps> = ({
   loading,
   actions,
 }) => {
+  // State to track which row has an open modal
+  const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
+
+  const handleOpenModal = (index: number) => {
+    setOpenModalIndex(index);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModalIndex(null);
+  };
+
   return (
     <div className="table-responsive pt-3">
       <table className="table table-striped table-hover align-middle">
@@ -52,7 +64,25 @@ const DataTable: React.FC<DataTableProps> = ({
                       : item[column.accessor]}
                   </td>
                 ))}
-                {actions && <td>{actions(item)}</td>}
+                <td>
+                  <button
+                    className="btn btn-info"
+                    onClick={() => handleOpenModal(index)}
+                  >
+                    Chi tiết
+                  </button>
+
+                  {/* Modal is only rendered when its index matches the open one */}
+                  {openModalIndex === index && (
+                    <DetailButton
+                      type="doctor"
+                      isOpen={true}
+                      onClose={handleCloseModal}
+                      title="Chi tiết"
+                      idItem={item._id}
+                    />
+                  )}
+                </td>
               </tr>
             ))
           ) : (

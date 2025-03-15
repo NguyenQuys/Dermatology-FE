@@ -2,7 +2,7 @@ import axios from "axios";
 import * as comesticApi from "./comestic.api";
 import * as medicineApi from "./medicine.api";
 import * as treatmentApi from "./treatment.api";
-import * as userApi from "./user.api";
+import UserAPI from "./user.api";
 
 const API_BASE_URL = "/api";
 
@@ -28,11 +28,11 @@ export const getAll = async (type: string) => {
     let response;
 
     if(type === "doctor")
-      response = await userApi.getAllUsersByRole("doctor");
+      response = await UserAPI.getAllUsersByRole("doctor");
     else if(type === "pharmacist")
-      response = await userApi.getAllUsersByRole("pharmacist");
+      response = await UserAPI.getAllUsersByRole("pharmacist");
     else if(type === "customer")
-      response = await userApi.getAllUsersByRole("customer");
+      response = await UserAPI.getAllUsersByRole("customer");
     else if (type === "medicine") 
       response = await medicineApi.getAllMedicines();
      else if (type === "treatment") 

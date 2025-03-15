@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as services from "../api/general.api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
+
+export let tabIdFromSidebar = "";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState<string>("");
@@ -13,6 +15,8 @@ function Sidebar() {
     setActiveTab(tabId);
     setLoading(true);
     setData(null);
+
+    tabIdFromSidebar = tabId; // Để xài đc bên Detail button
 
     try {
       const entities = await services.selectTab(tabId);
