@@ -1,15 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Admin from "./pages/admin/Admin";
 import Home from "./pages/customer/Home";
-import SignIn from "./pages/customer/SignIn";
+import MainLayout from "./layouts/MainLayout";
+import SignInForm from "./components/mutual/SignInForm";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<Home />} />
+        <Route path="sign-in" element={<SignInForm />} />
+      </Route>
       <Route path="/admin" element={<Admin />} />
-      <Route path="/signin" element={<SignIn />} />
     </Routes>
   );
 }

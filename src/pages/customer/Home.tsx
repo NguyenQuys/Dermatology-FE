@@ -1,148 +1,15 @@
 import React from "react";
 import "/src/assets/customer/css/style.css";
 import "/src/assets/customer/css/vars.css";
+import Navigation_bar from "../../components/customer/Navigation_bar";
+import Footer from "../../components/customer/Footer";
 
 const Home: React.FC = () => {
   return (
     <div className="trang-ch">
-      <section className="_4-section">
-        <div className="frame-1">
-          <img
-            className="communication-1"
-            src="/src/assets/customer/images/communication-10.png"
-            alt="communication"
-          />
-          <div className="oskinfacebook-com">oskinfacebook.com</div>
-          <div className="oskinistagram-com">oskinistagram.com</div>
-          <div className="oskintiktok-com">oskintiktok.com</div>
-          <img
-            className="instagram-2"
-            src="/src/assets/customer/images/instagram-20.png"
-            alt="instagram"
-          />
-          <img
-            className="tik-tok-2"
-            src="/src/assets/customer/images/tik-tok-20.png"
-            alt="tiktok"
-          />
-        </div>
-        <div className="oskin-tr-m-n-chu-n-y-khoa">
-          <span>
-            <span className="oskin-tr-m-n-chu-n-y-khoa-span"></span>
-            <span className="oskin-tr-m-n-chu-n-y-khoa-span2">
-              OSKIN
-              <br />
-            </span>
-            <span className="oskin-tr-m-n-chu-n-y-khoa-span3">
-              TRỊ MỤN CHUẨN Y KHOA
-            </span>
-          </span>
-        </div>
-        <div className="c-ng-ty-c-ph-n-ph-ng-kh-m-chuy-n-khoa-da-li-u-o-2-skin">
-          CÔNG TY CỔ PHẦN PHÒNG KHÁM CHUYÊN KHOA DA LIỄU O2 SKIN
-        </div>
-        <div className="a-ch-10-80-c-song-h-nh-h-n-i-ph-ng-t-n-ph-th-c-h-ch-minh">
-          Địa chỉ: 10/80C Song Hành Hà Nội, Phường Tân Phú, Thủ Đức, Hồ Chí Minh
-        </div>
-        <img
-          className="location-1"
-          src="/src/assets/customer/images/location-10.png"
-          alt="location"
-        />
-        <div className="_0345678901-0234567890">0345678901, 0234567890</div>
-        <img
-          className="telephone-1"
-          src="/src/assets/customer/images/telephone-10.png"
-          alt="telephone"
-        />
-        <div className="phongkhamoskin-gmail-com">phongkhamoskin@gmail.com</div>
-        <img
-          className="mail-1"
-          src="/src/assets/customer/images/mail-10.png"
-          alt="mail"
-        />
-      </section>
-
-      <section className="_3-section">
-        <div className="_3-bg"></div>
-        <div className="product-text">
-          <div className="xem-th-m">Xem thêm ...</div>
-          <div className="s-n-ph-m">Sản Phẩm</div>
-          <div className="ch-m-s-c-da-t-t-bao-g-m-vi-c-gi-da-s-ch-s-d-ng-m-v-b-o-v-kh-i-t-c-h-i-c-a-nh-n-ng-m-t-tr-i-c-c-s-n-ph-m-ch-m-s-c-da-kh-c-nhau-c-th-gi-p-gi-i-quy-t-nh-ng-v-n-n-y-b-ng-c-ch-cung-c-p-m-t-y-t-b-o-ch-t-b-o-v-da-kh-i-tia-uv-v-mang-l-i-nhi-u-l-i-ch-kh-c-i-u-quan-tr-ng-l-ch-n-s-n-ph-m-ph-h-p-v-i-lo-i-da-c-a-b-n-v-duy-tr-quy-tr-nh-ch-m-s-c-da-u-n-t-hi-u-qu-t-t-nh-t">
-            Chăm sóc da tốt bao gồm việc giữ da sạch sẽ, dưỡng ẩm và bảo vệ khỏi
-            tác hại của ánh nắng mặt trời. Các sản phẩm chăm sóc da khác nhau có
-            thể giúp giải quyết những vấn đề này bằng cách cung cấp độ ẩm, tẩy
-            tế bào chết, bảo vệ da khỏi tia UV và mang lại nhiều lợi ích khác.
-            Điều quan trọng là chọn sản phẩm phù hợp với loại da của bạn và duy
-            trì quy trình chăm sóc da đều đặn để đạt hiệu quả tốt nhất.
-          </div>
-        </div>
-        <div className="product-images">
-          <img
-            className="image-01"
-            src="/src/assets/customer/images/image-010.png"
-            alt="product 1"
-          />
-          <img
-            className="image-02"
-            src="/src/assets/customer/images/image-020.png"
-            alt="product 2"
-          />
-          <img
-            className="image-03"
-            src="/src/assets/customer/images/image-030.png"
-            alt="product 3"
-          />
-          <img
-            className="image-04"
-            src="/src/assets/customer/images/image-040.png"
-            alt="product 4"
-          />
-          <img
-            className="image-05"
-            src="/src/assets/customer/images/image-050.png"
-            alt="product 5"
-          />
-          <img
-            className="image-06"
-            src="/src/assets/customer/images/image-060.png"
-            alt="product 6"
-          />
-        </div>
-        <div className="line-1"></div>
-        <div className="nourish-line">
-          <div className="h-y-ch-m-s-c-v-nu-i-d-ng-l-n-da-kh-e-m-nh-r-ng-r">
-            Hãy chăm sóc và nuôi dưỡng làn da khỏe mạnh, rạng rỡ!
-          </div>
-        </div>
-      </section>
-
       <section className="_1-section">
         <div className="_1-bg"></div>
-        <nav className="nav-bar">
-          <div className="rectangle-1"></div>
-          <div className="navigation">
-            <div className="nav-items">
-              <div className="logo">
-                <div className="oskin-tr-m-n-chu-n-y-khoa2">
-                  <span>OSKIN</span>
-                  <br />
-                  <span>TRỊ MỤN CHUẨN Y KHOA</span>
-                </div>
-              </div>
-              <div className="trang-ch2">Trang chủ</div>
-              <div className="s-n-ph-m2">Sản phẩm</div>
-              <div className="t-l-ch-t-v-n">Đặt lịch tư vấn</div>
-              <div className="mua-h-ng">Mua hàng</div>
-              <div className="chu-n-o-n">Chuẩn đoán</div>
-            </div>
-            <div className="sign-in">
-              <a type="button" className="sign-in-button text text-danger">
-                Đăng nhập
-              </a>
-            </div>
-          </div>
-        </nav>
+        <Navigation_bar />
         <div className="home-text">
           <div className="tr-m-n-chu-n-y-khoa">
             <span>
@@ -250,6 +117,60 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+      <section className="_3-section">
+        <div className="_3-bg"></div>
+        <div className="product-text">
+          <div className="xem-th-m">Xem thêm ...</div>
+          <div className="s-n-ph-m">Sản Phẩm</div>
+          <div className="ch-m-s-c-da-t-t-bao-g-m-vi-c-gi-da-s-ch-s-d-ng-m-v-b-o-v-kh-i-t-c-h-i-c-a-nh-n-ng-m-t-tr-i-c-c-s-n-ph-m-ch-m-s-c-da-kh-c-nhau-c-th-gi-p-gi-i-quy-t-nh-ng-v-n-n-y-b-ng-c-ch-cung-c-p-m-t-y-t-b-o-ch-t-b-o-v-da-kh-i-tia-uv-v-mang-l-i-nhi-u-l-i-ch-kh-c-i-u-quan-tr-ng-l-ch-n-s-n-ph-m-ph-h-p-v-i-lo-i-da-c-a-b-n-v-duy-tr-quy-tr-nh-ch-m-s-c-da-u-n-t-hi-u-qu-t-t-nh-t">
+            Chăm sóc da tốt bao gồm việc giữ da sạch sẽ, dưỡng ẩm và bảo vệ khỏi
+            tác hại của ánh nắng mặt trời. Các sản phẩm chăm sóc da khác nhau có
+            thể giúp giải quyết những vấn đề này bằng cách cung cấp độ ẩm, tẩy
+            tế bào chết, bảo vệ da khỏi tia UV và mang lại nhiều lợi ích khác.
+            Điều quan trọng là chọn sản phẩm phù hợp với loại da của bạn và duy
+            trì quy trình chăm sóc da đều đặn để đạt hiệu quả tốt nhất.
+          </div>
+        </div>
+        <div className="product-images">
+          <img
+            className="image-01"
+            src="/src/assets/customer/images/image-010.png"
+            alt="product 1"
+          />
+          <img
+            className="image-02"
+            src="/src/assets/customer/images/image-020.png"
+            alt="product 2"
+          />
+          <img
+            className="image-03"
+            src="/src/assets/customer/images/image-030.png"
+            alt="product 3"
+          />
+          <img
+            className="image-04"
+            src="/src/assets/customer/images/image-040.png"
+            alt="product 4"
+          />
+          <img
+            className="image-05"
+            src="/src/assets/customer/images/image-050.png"
+            alt="product 5"
+          />
+          <img
+            className="image-06"
+            src="/src/assets/customer/images/image-060.png"
+            alt="product 6"
+          />
+        </div>
+        <div className="line-1"></div>
+        <div className="nourish-line">
+          <div className="h-y-ch-m-s-c-v-nu-i-d-ng-l-n-da-kh-e-m-nh-r-ng-r">
+            Hãy chăm sóc và nuôi dưỡng làn da khỏe mạnh, rạng rỡ!
+          </div>
+        </div>
+      </section>
+      <Footer />
     </div>
   );
 };
