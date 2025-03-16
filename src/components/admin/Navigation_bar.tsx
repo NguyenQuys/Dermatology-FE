@@ -1,9 +1,6 @@
-import logo from "../assets/admin/images/logo.svg";
-import logoMini from "../assets/admin/images/logo-mini.svg";
-import face1 from "../assets/admin/images/faces/face1.jpg";
-import face8 from "../assets/admin/images/faces/face8.jpg";
-import face10 from "../assets/admin/images/faces/face10.jpg";
-import face12 from "../assets/admin/images/faces/face12.jpg";
+import logo from "/src/assets/admin/images/logo.svg";
+import logoMini from "/src/assets/admin/images/logo-mini.svg";
+import face1 from "/src/assets/admin/images/faces/face1.jpg";
 
 function NavigationBar() {
   return (

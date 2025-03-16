@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as services from "../api/general.api";
+import * as services from "../../api/general.api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { tabIdFromSidebar } from "./Sidebar";
-import UserAPI from "../api/user.api";
+import UserAPI from "../../api/user.api";
 
 interface Row {
   header: string;
@@ -143,10 +143,7 @@ const DetailButton: React.FC<DetailButtonProps> = ({
       tabIndex={-1}
       onClick={onClose}
     >
-      <div
-        className="modal-dialog modal-lg"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{title}</h5>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import TreatmentAPI from "../api/treatment.api";
-import ComesticAPI from "../api/comestic.api";
-import { Treatment } from "../models/treatment.model";
+import TreatmentAPI from "../../api/treatment.api";
+import ComesticAPI from "../../api/comestic.api";
+import { Treatment } from "../../models/treatment.model";
 import { assignTypeSideBar } from "./AddButton";
-import * as showNotification from "../utils/toast.util";
-import { Comestic } from "../models/comestic.model";
-import { Medicine } from "../models/medicine.model";
-import { User } from "../models/user.model";
-import UserAPI from "../api/user.api";
-import MedicineAPI from "../api/medicine.api";
+import * as showNotification from "../../utils/toast.util";
+import { Comestic } from "../../models/comestic.model";
+import { Medicine } from "../../models/medicine.model";
+import { User } from "../../models/user.model";
+import UserAPI from "../../api/user.api";
+import MedicineAPI from "../../api/medicine.api";
 
 interface Row {
   header: string;
@@ -129,10 +129,7 @@ let Modal: React.FC<ModalProps> = ({
       tabIndex={-1}
       onClick={onClose}
     >
-      <div
-        className="modal-dialog modal-lg"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{title}</h5>

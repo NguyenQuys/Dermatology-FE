@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/admin/css/App.css";
+import "/src/assets/admin/css/App.css";
 import NavigationBar from "./Navigation_bar";
 import Sidebar from "./Sidebar";
 import "bootstrap/dist/css/bootstrap.min.css";

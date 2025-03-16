@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet"; // import link and head tag
 import "/src/assets/admin/css/vertical-layout-light/style.css";
 import "/src/assets/admin/vendors/css/vendor.bundle.base.css";
 import "/src/assets/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.css";
-import Content from "../../components/Content";
+import Content from "../../components/admin/Content";
 
 // Define the type for props
 /*interface AdminProps {
