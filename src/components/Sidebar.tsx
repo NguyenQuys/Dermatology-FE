@@ -58,8 +58,9 @@ function Sidebar() {
       header: "Trạng thái",
       accessor: "isHidden",
       render: (value: boolean) =>
-        value ? "Đang hoạt động" : "Không hoạt động",
+        value ? "Không hoạt động" : "Đang hoạt động",
     },
+    { header: "Điểm trung bình", accessor: "averageRating" },
   ];
 
   const medicineColumns = [

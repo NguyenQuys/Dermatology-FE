@@ -3,19 +3,29 @@ import { Comestic } from "../models/comestic.model";
 
 const API_COMESTIC_URL = "/api/comestic";
 
-export const getAllCometics = async () => {
+class ComesticAPI {
+  async getAllCometics() {
     const response = await axios.get(`${API_COMESTIC_URL}/getAll`);
     return response;
-};
+  }
 
-export const addComestic = async (comestic: Comestic): Promise<string> => {
+  async addComestic(comestic: Comestic): Promise<string> {
     try {
-        const response = await axios.post(`${API_COMESTIC_URL}/add`, comestic);
-        return response.data.message;
+      const response = await axios.post(`${API_COMESTIC_URL}/add`, comestic);
+      return response.data.message;
     } catch (error: any) {
-        throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
+      throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
     }
-};
+  }
 
+  async getComesticById(id: string) {
+    try {
+      const response = await axios.get(`${API_COMESTIC_URL}/getById/${id}`);
+      return response.data;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
+}
 
-
+export default new ComesticAPI();

@@ -21,7 +21,7 @@ class UserAPI {
 
   async getUserById(id: string) {
     try {
-      const response = await axios.post(`${API_USER_URL}/getById`,{id});
+      const response = await axios.post(`${API_USER_URL}/getById`, { id });
       return response.data;
     } catch (error: any) {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
@@ -29,4 +29,4 @@ class UserAPI {
   }
 }
 
-export default new UserAPI;
+export default new UserAPI();

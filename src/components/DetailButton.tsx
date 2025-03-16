@@ -21,79 +21,120 @@ const DetailButton: React.FC<DetailButtonProps> = ({
   title,
   idItem,
 }) => {
-  const [data, setData] = useState<any>(null); // State để lưu thông tin từ API
+  const [data, setData] = useState<any>(null);
 
-  // Lấy danh sách các cột hiển thị dựa vào tab đang mở
-  const getRows = (): Row[] | null => {
+  const getRows = (): Row[] => {
+    const commonRows = [
+      { header: "Tên", accessor: "name" },
+      { header: "Email", accessor: "email" },
+      { header: "Tuổi", accessor: "age" },
+      {
+        header: "Trạng thái",
+        accessor: "status",
+        render: (value: string) =>
+          value === "active" ? "Đang hoạt động" : "Không hoạt động",
+      },
+      { header: "Ngày đăng ký", accessor: "createdAt" },
+      { header: "Cập nhật gần nhất", accessor: "updatedAt" },
+    ];
+
     switch (tabIdFromSidebar) {
       case "nav-doctor-tab":
       case "nav-pharmacist-tab":
         return [
-          { header: "Tên", accessor: "name" },
-          { header: "Email", accessor: "email" },
-          { header: "Tuổi", accessor: "age" },
+          ...commonRows,
           {
             header: "Giới tính",
             accessor: "gender",
-            render: (value: string) => {
-              if (value === "male") return "Nam";
-              if (value === "female") return "Nữ";
-              return "Khác";
-            },
-          },
-          {
-            header: "Trạng thái",
-            accessor: "status",
             render: (value: string) =>
-              value === "active" ? "Đang hoạt động" : "Không hoạt động",
+              value === "male" ? "Nam" : value === "female" ? "Nữ" : "Khác",
           },
-          { header: "Ngày đăng ký", accessor: "createdAt" },
-          { header: "Cập nhật gần nhất", accessor: "updatedAt" },
         ];
+
       case "nav-customer-tab":
         return [
-          { header: "Tên", accessor: "name" },
-          { header: "Email", accessor: "email" },
-          { header: "Tuổi", accessor: "age" },
+          ...commonRows,
           { header: "Giới tính", accessor: "gender" },
-          { header: "Trạng thái", accessor: "status" },
-          { header: "Ngày đăng ký", accessor: "createdAt" },
-          { header: "Cập nhật gần nhất", accessor: "updatedAt" },
+          {
+            header: "Level",
+            accessor: "membership.level",
+            render: (value) => value || "Chưa có",
+          },
+          {
+            header: "Tích điểm",
+            accessor: "membership.points",
+            render: (value) => value ?? 0,
+          },
+          {
+            header: "Tiền tích lũy",
+            accessor: "membership.total_spent",
+            render: (value) => value ?? 0,
+          },
         ];
+
       case "nav-comestic-tab":
-      case "nav-medicine-tab":
-      case "nav-treatment-tab":
-        return [];
+        return data?.reviews?.length > 0
+          ? [
+              {
+                header: "Đánh giá",
+                accessor: "reviews",
+                render: () =>
+                  data.reviews.map((review: any, index: number) => (
+                    <div key={index} className="border p-2 mb-2">
+                      <p>
+                        <strong>Id khách hàng:</strong> {review.customer_id}
+                      </p>
+                      <p>
+                        <strong>Bình luận:</strong> {review.comment}
+                      </p>
+                      <p>
+                        <strong>Điểm số:</strong> {review.rating}
+                      </p>
+                      <p>
+                        <strong>Thời gian:</strong>{" "}
+                        {new Date(review.createdAt).toLocaleString("vi-VN")}
+                      </p>
+                    </div>
+                  )),
+              },
+            ]
+          : [
+              {
+                header: "Đánh giá",
+                accessor: "reviews",
+                render: () => "Không có đánh giá nào",
+              },
+            ];
+
       default:
         return [];
     }
   };
 
-  // Gọi API lấy dữ liệu theo ID
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response;
-        switch (tabIdFromSidebar) {
-          case "nav-pharmacist-tab":
-          case "nav-doctor-tab":
-          case "nav-customer-tab":
-            response = await UserAPI.getUserById(idItem);
-            break;
-          default:
-            return;
-        }
+        const apiMap: Record<string, any> = {
+          "nav-pharmacist-tab": UserAPI.getUserById,
+          "nav-doctor-tab": UserAPI.getUserById,
+          "nav-customer-tab": UserAPI.getUserById,
+        };
 
-        setData(response);
+        const apiFunction = apiMap[tabIdFromSidebar];
+        if (apiFunction) {
+          const response = await apiFunction(idItem);
+          console.log("Dữ liệu từ API:", response);
+          setData(response);
+        }
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
       }
     };
 
     fetchData();
-  }, [idItem]); // Gọi lại mỗi khi `idItem` thay đổi
+  }, [idItem]);
 
-  const rows = getRows() || [];
+  const rows = getRows();
 
   return (
     <div
@@ -117,30 +158,40 @@ const DetailButton: React.FC<DetailButtonProps> = ({
           </div>
           <div className="modal-body">
             <form>
-              {rows.length === 0 ? (
-                <p>Không có dữ liệu để hiển thị</p>
-              ) : (
-                rows.map((row, index) => (
-                  <div className="mb-3" key={index}>
-                    <label htmlFor={row.accessor} className="form-label">
-                      {row.header}
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id={row.accessor}
-                      value={
-                        data
-                          ? row.render
-                            ? row.render(data[row.accessor])
-                            : data[row.accessor] || ""
-                          : ""
-                      }
-                      readOnly
-                    />
-                  </div>
-                ))
-              )}
+              {rows.map((row, index) => (
+                <div className="mb-3" key={index}>
+                  {tabIdFromSidebar === "nav-comestic-tab" ? (
+                    row.render ? (
+                      row.render(data[row.accessor])
+                    ) : (
+                      <p>
+                        {row.header}:{" "}
+                        {data?.[row.accessor] || "Không có dữ liệu"}
+                      </p>
+                    )
+                  ) : (
+                    <>
+                      <label htmlFor={row.accessor} className="form-label">
+                        {row.header}
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id={row.accessor}
+                        value={
+                          row.accessor.includes("membership.")
+                            ? data?.membership?.[row.accessor.split(".")[1]] ||
+                              ""
+                            : row.render
+                            ? row.render(data?.[row.accessor])
+                            : data?.[row.accessor] || ""
+                        }
+                        readOnly
+                      />
+                    </>
+                  )}
+                </div>
+              ))}
             </form>
           </div>
         </div>

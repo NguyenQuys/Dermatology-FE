@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { addTreatment } from "../api/treatment.api";
-import { addComestic } from "../api/comestic.api";
+import TreatmentAPI from "../api/treatment.api";
+import ComesticAPI from "../api/comestic.api";
 import { Treatment } from "../models/treatment.model";
 import { assignTypeSideBar } from "./AddButton";
 import * as showNotification from "../utils/toast.util";
 import { Comestic } from "../models/comestic.model";
 import { Medicine } from "../models/medicine.model";
-import { addMedicine } from "../api/medicine.api";
 import { User } from "../models/user.model";
 import UserAPI from "../api/user.api";
+import MedicineAPI from "../api/medicine.api";
 
 interface Row {
   header: string;
@@ -92,11 +92,17 @@ let Modal: React.FC<ModalProps> = ({
 
       if (typeModal === "comestic") {
         dataToSend.category = category;
-        response = await addComestic(dataToSend as unknown as Comestic);
+        response = await ComesticAPI.addComestic(
+          dataToSend as unknown as Comestic
+        );
       } else if (typeModal === "treatment") {
-        response = await addTreatment(dataToSend as unknown as Treatment);
+        response = await TreatmentAPI.addTreatment(
+          dataToSend as unknown as Treatment
+        );
       } else if (typeModal === "medicine") {
-        response = await addMedicine(dataToSend as unknown as Medicine);
+        response = await MedicineAPI.addMedicine(
+          dataToSend as unknown as Medicine
+        );
       } else if (
         typeModal === "doctor" ||
         typeModal === "pharmacist" ||
