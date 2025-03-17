@@ -5,7 +5,7 @@ import Navigation_bar from "../components/customer/Navigation_bar";
 const MainLayout = () => {
   return (
     <>
-      {/*<Navigation_bar />*/}
+      <Navigation_bar />
       <main>
         <Outlet />
       </main>

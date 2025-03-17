@@ -1,7 +1,6 @@
 import React from "react";
 import "/src/assets/customer/css/style.css";
 import "/src/assets/customer/css/vars.css";
-import Navigation_bar from "../../components/customer/Navigation_bar";
 import Footer from "../../components/customer/Footer";
 
 const Home: React.FC = () => {
@@ -9,12 +8,11 @@ const Home: React.FC = () => {
     <div className="trang-ch">
       <section className="_1-section">
         <div className="_1-bg"></div>
-        <Navigation_bar />
         <div className="home-text">
           <div className="tr-m-n-chu-n-y-khoa">
             <span>
               <span className="tr-m-n-chu-n-y-khoa-span">
-                Trị mụn chuẩn y khoa
+                TRỊ MỤN CHUẨN Y KHOA
               </span>
             </span>
           </div>
@@ -63,7 +61,7 @@ const Home: React.FC = () => {
       <section className="_2-section">
         <div className="know-your-skin">
           <div className="line-3"></div>
-          <div className="t-l-ch-kh-m">Đặt Lịch Khám</div>
+          <div className="t-l-ch-kh-m">ĐẶT LỊCH KHÁM</div>
           <div className="line-2"></div>
         </div>
         <div className="skin-type">
@@ -121,7 +119,7 @@ const Home: React.FC = () => {
         <div className="_3-bg"></div>
         <div className="product-text">
           <div className="xem-th-m">Xem thêm ...</div>
-          <div className="s-n-ph-m">Sản Phẩm</div>
+          <div className="s-n-ph-m">SẢN PHẨM</div>
           <div className="ch-m-s-c-da-t-t-bao-g-m-vi-c-gi-da-s-ch-s-d-ng-m-v-b-o-v-kh-i-t-c-h-i-c-a-nh-n-ng-m-t-tr-i-c-c-s-n-ph-m-ch-m-s-c-da-kh-c-nhau-c-th-gi-p-gi-i-quy-t-nh-ng-v-n-n-y-b-ng-c-ch-cung-c-p-m-t-y-t-b-o-ch-t-b-o-v-da-kh-i-tia-uv-v-mang-l-i-nhi-u-l-i-ch-kh-c-i-u-quan-tr-ng-l-ch-n-s-n-ph-m-ph-h-p-v-i-lo-i-da-c-a-b-n-v-duy-tr-quy-tr-nh-ch-m-s-c-da-u-n-t-hi-u-qu-t-t-nh-t">
             Chăm sóc da tốt bao gồm việc giữ da sạch sẽ, dưỡng ẩm và bảo vệ khỏi
             tác hại của ánh nắng mặt trời. Các sản phẩm chăm sóc da khác nhau có
@@ -170,7 +168,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

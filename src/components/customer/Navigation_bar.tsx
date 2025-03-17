@@ -2,30 +2,47 @@ import { Link } from "react-router-dom";
 
 const Navigation_bar = () => {
   return (
-    <nav className="nav-bar">
+    <div className="nav-bar">
       <div className="rectangle-1"></div>
       <div className="navigation">
         <div className="nav-items">
           <div className="logo">
             <div className="oskin-tr-m-n-chu-n-y-khoa2">
-              <span>OSKIN</span>
-              <br />
-              <span>TRỊ MỤN CHUẨN Y KHOA</span>
+              <span>
+                <span className="oskin-tr-m-n-chu-n-y-khoa-2-span"></span>
+                <span className="oskin-tr-m-n-chu-n-y-khoa-2-span2">
+                  OSKIN
+                  <br />
+                </span>
+                <span className="oskin-tr-m-n-chu-n-y-khoa-2-span3">
+                  TRỊ MỤN CHUẨN Y KHOA
+                </span>
+              </span>
             </div>
           </div>
-          <div className="trang-ch2">Trang chủ</div>
-          <div className="s-n-ph-m2">Sản phẩm</div>
-          <div className="t-l-ch-t-v-n">Đặt lịch tư vấn</div>
-          <div className="mua-h-ng">Mua hàng</div>
-          <div className="chu-n-o-n">Chuẩn đoán</div>
+          <Link to="/" className="trang-ch2">
+            Trang chủ
+          </Link>
+          <Link to="/products" className="s-n-ph-m2">
+            Sản phẩm
+          </Link>
+          <Link to="/consultation" className="t-l-ch-t-v-n">
+            Đặt lịch tư vấn
+          </Link>
+          <Link to="/shopping" className="mua-h-ng">
+            Mua hàng
+          </Link>
+          <Link to="/diagnosis" className="chu-n-o-n">
+            Chuẩn đoán
+          </Link>
         </div>
         <div className="sign-in">
-          <Link to="/sign-in" className="sign-in-button text text-danger">
+          <Link to="/sign-in" className="text-danger fw-bold">
             Đăng nhập
           </Link>
         </div>
       </div>
-    </nav>
+    </div>
   );
 };
 
