@@ -1,7 +1,6 @@
 import React from "react";
-import "/src/assets/customer/css/style.css";
-import "/src/assets/customer/css/vars.css";
-import Footer from "../../components/customer/Footer";
+import "/src/assets/customer/home/css/style.css";
+import "/src/assets/customer/home/css/vars.css";
 
 const Home: React.FC = () => {
   return (
@@ -26,7 +25,7 @@ const Home: React.FC = () => {
           <div className="image-012">
             <img
               className="ellipse-1"
-              src="/src/assets/customer/images/ellipse-10.png"
+              src="/src/assets/customer/home/images/ellipse-10.png"
               alt="ellipse 1"
             />
             <div className="ellipse-4"></div>
@@ -34,7 +33,7 @@ const Home: React.FC = () => {
           <div className="image-022">
             <img
               className="ellipse-3"
-              src="/src/assets/customer/images/ellipse-30.png"
+              src="/src/assets/customer/home/images/ellipse-30.png"
               alt="ellipse 3"
             />
             <div className="ellipse-7"></div>
@@ -42,7 +41,7 @@ const Home: React.FC = () => {
           <div className="image-032">
             <img
               className="ellipse-5"
-              src="/src/assets/customer/images/ellipse-50.png"
+              src="/src/assets/customer/home/images/ellipse-50.png"
               alt="ellipse 5"
             />
             <div className="ellipse-6"></div>
@@ -50,7 +49,7 @@ const Home: React.FC = () => {
           <div className="image-042">
             <img
               className="ellipse-2"
-              src="/src/assets/customer/images/ellipse-20.png"
+              src="/src/assets/customer/home/images/ellipse-20.png"
               alt="ellipse 2"
             />
             <div className="ellipse-8"></div>
@@ -68,7 +67,7 @@ const Home: React.FC = () => {
           <div className="frame-6">
             <img
               className="frame-62"
-              src="/src/assets/customer/images/frame-61.png"
+              src="/src/assets/customer/home/images/frame-61.png"
               alt="BS Nguyễn Văn An"
             />
             <div className="frame-7">
@@ -84,7 +83,7 @@ const Home: React.FC = () => {
           <div className="frame-72">
             <img
               className="frame-62"
-              src="/src/assets/customer/images/frame-62.png"
+              src="/src/assets/customer/home/images/frame-62.png"
               alt="BS Lê Thị Hương"
             />
             <div className="frame-7">
@@ -100,7 +99,7 @@ const Home: React.FC = () => {
           <div className="frame-8">
             <img
               className="frame-62"
-              src="/src/assets/customer/images/frame-63.png"
+              src="/src/assets/customer/home/images/frame-63.png"
               alt="BS Trần Anh Thư"
             />
             <div className="frame-7">
@@ -132,32 +131,32 @@ const Home: React.FC = () => {
         <div className="product-images">
           <img
             className="image-01"
-            src="/src/assets/customer/images/image-010.png"
+            src="/src/assets/customer/home/images/image-010.png"
             alt="product 1"
           />
           <img
             className="image-02"
-            src="/src/assets/customer/images/image-020.png"
+            src="/src/assets/customer/home/images/image-020.png"
             alt="product 2"
           />
           <img
             className="image-03"
-            src="/src/assets/customer/images/image-030.png"
+            src="/src/assets/customer/home/images/image-030.png"
             alt="product 3"
           />
           <img
             className="image-04"
-            src="/src/assets/customer/images/image-040.png"
+            src="/src/assets/customer/home/images/image-040.png"
             alt="product 4"
           />
           <img
             className="image-05"
-            src="/src/assets/customer/images/image-050.png"
+            src="/src/assets/customer/home/images/image-050.png"
             alt="product 5"
           />
           <img
             className="image-06"
-            src="/src/assets/customer/images/image-060.png"
+            src="/src/assets/customer/home/images/image-060.png"
             alt="product 6"
           />
         </div>

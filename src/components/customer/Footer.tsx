@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="frame-1">
         <img
           className="communication-1"
-          src="/src/assets/customer/images/communication-10.png"
+          src="/src/assets/customer/home/images/communication-10.png"
           alt="communication"
         />
         <div className="oskinfacebook-com">oskinfacebook.com</div>
@@ -12,12 +12,12 @@ const Footer = () => {
         <div className="oskintiktok-com">oskintiktok.com</div>
         <img
           className="instagram-2"
-          src="/src/assets/customer/images/instagram-20.png"
+          src="/src/assets/customer/home/images/instagram-20.png"
           alt="instagram"
         />
         <img
           className="tik-tok-2"
-          src="/src/assets/customer/images/tik-tok-20.png"
+          src="/src/assets/customer/home/images/tik-tok-20.png"
           alt="tiktok"
         />
       </div>
@@ -41,19 +41,19 @@ const Footer = () => {
       </div>
       <img
         className="location-1"
-        src="/src/assets/customer/images/location-10.png"
+        src="/src/assets/customer/home/images/location-10.png"
         alt="location"
       />
       <div className="_0345678901-0234567890">0345678901, 0234567890</div>
       <img
         className="telephone-1"
-        src="/src/assets/customer/images/telephone-10.png"
+        src="/src/assets/customer/home/images/telephone-10.png"
         alt="telephone"
       />
       <div className="phongkhamoskin-gmail-com">phongkhamoskin@gmail.com</div>
       <img
         className="mail-1"
-        src="/src/assets/customer/images/mail-10.png"
+        src="/src/assets/customer/home/images/mail-10.png"
         alt="mail"
       />
     </section>

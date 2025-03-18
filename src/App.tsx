@@ -5,6 +5,7 @@ import Home from "./pages/customer/Home";
 import MainLayout from "./layouts/MainLayout";
 import SignInForm from "./components/mutual/SignInForm";
 import OTPForm from "./components/mutual/OTPForm";
+import Products from "./pages/customer/Products";
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="/login" element={<SignInForm />} />
-        <Route path="verifyOtp" element={<OTPForm />} />
+        <Route path="/verifyOtp" element={<OTPForm />} />
+        <Route path="/products" element={<Products />} />
       </Route>
       <Route path="/admin" element={<Admin />} />
     </Routes>
