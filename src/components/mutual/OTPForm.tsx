@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import * as showNotification from "../../utils/toast.util";
-import OtpAPI from "../../api/otp.api";
+import { useOtpAPI } from "../../api/otp.api";
 import { useNavigate } from "react-router-dom";
 
 const OTPForm = () => {
+  const { verifyOtp } = useOtpAPI();
   const [otpCode, setOtpCode] = useState("");
   const [countdown, setCountdown] = useState(10);
   const [canResend, setCanResend] = useState(false);
@@ -28,7 +29,7 @@ const OTPForm = () => {
     }
 
     try {
-      const response = await OtpAPI.verifyOtp(otpCode);
+      const response = await verifyOtp(otpCode);
       if (response.status === 200) {
         showNotification.showSuccessToast(response.data.message);
         navigate("/");
@@ -36,6 +37,7 @@ const OTPForm = () => {
         showNotification.showErrorToast(response.data.message);
       }
     } catch (error) {
+      console.log(error);
       showNotification.showErrorToast("Xác thực thất bại, vui lòng thử lại!");
     }
   };

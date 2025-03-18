@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
-        <Route path="sign-in" element={<SignInForm />} />
+        <Route path="/login" element={<SignInForm />} />
         <Route path="verifyOtp" element={<OTPForm />} />
       </Route>
       <Route path="/admin" element={<Admin />} />

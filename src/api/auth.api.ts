@@ -14,6 +14,15 @@ class AuthAPI {
       return error.response;
     }
   }
+
+  async logout() {
+    try {
+      const response = await axios.post(`${API_AUTH_URL}/logout`);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
 
 export default new AuthAPI();

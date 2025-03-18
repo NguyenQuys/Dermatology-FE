@@ -1,6 +1,18 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Navigation_bar = () => {
+  const navigate = useNavigate();
+
+  const { user, token, login, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
     <div className="nav-bar">
       <div className="rectangle-1"></div>
@@ -36,11 +48,23 @@ const Navigation_bar = () => {
             Chuẩn đoán
           </Link>
         </div>
-        <div className="sign-in">
-          <Link to="/sign-in" className="text-danger fw-bold">
-            Đăng nhập
-          </Link>
-        </div>
+        {!token ? (
+          <div className="sign-in">
+            <Link to="/login" className="text-danger fw-bold">
+              Đăng nhập
+            </Link>
+          </div>
+        ) : (
+          <div className="sign-in">
+            <a
+              onClick={handleLogout}
+              className="text-danger fw-bold"
+              style={{ cursor: "pointer" }}
+            >
+              Đăng xuất
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
