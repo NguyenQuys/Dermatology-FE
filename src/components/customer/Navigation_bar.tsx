@@ -32,25 +32,45 @@ const Navigation_bar = () => {
               </span>
             </div>
           </div>
-          <Link to="/" className="trang-ch2">
+          <Link to="/" className="trang-ch2" style={{ textDecoration: "none" }}>
             Trang chủ
           </Link>
-          <Link to="/products" className="s-n-ph-m2">
+          <Link
+            to="/products"
+            className="s-n-ph-m2"
+            style={{ textDecoration: "none" }}
+          >
             Sản phẩm
           </Link>
-          <Link to="/consultation" className="t-l-ch-t-v-n">
+          <Link
+            to="/appointment"
+            className="t-l-ch-t-v-n"
+            style={{ textDecoration: "none" }}
+          >
             Đặt lịch tư vấn
           </Link>
-          <Link to="/shopping" className="mua-h-ng">
-            Mua hàng
-          </Link>
-          <Link to="/diagnosis" className="chu-n-o-n">
+          <Link
+            to="/diagnosis"
+            className="chu-n-o-n"
+            style={{ textDecoration: "none" }}
+          >
             Chuẩn đoán
+          </Link>
+          <Link
+            to="/shopping"
+            className="mua-h-ng"
+            style={{ textDecoration: "none" }}
+          >
+            Giỏ hàng
           </Link>
         </div>
         {!token ? (
           <div className="sign-in">
-            <Link to="/login" className="text-danger fw-bold">
+            <Link
+              to="/login"
+              className="text-danger fw-bold"
+              style={{ textDecoration: "none" }}
+            >
               Đăng nhập
             </Link>
           </div>
@@ -59,7 +79,7 @@ const Navigation_bar = () => {
             <a
               onClick={handleLogout}
               className="text-danger fw-bold"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", textDecoration: "none" }}
             >
               Đăng xuất
             </a>

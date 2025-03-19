@@ -1,6 +1,6 @@
 export interface Comestic {
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
+  name: string;
+  price: number;
+  category: string;
+  quantity: Date;
 }

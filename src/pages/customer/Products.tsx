@@ -35,7 +35,7 @@ const Products: React.FC = () => {
               <Link
                 to={`/products/${comestic._id}`}
                 className={styles.snp3}
-                key={comestic.id}
+                key={comestic._id}
               >
                 <img
                   className={styles.frame6}

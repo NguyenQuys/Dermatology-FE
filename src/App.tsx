@@ -6,6 +6,7 @@ import MainLayout from "./layouts/MainLayout";
 import SignInForm from "./components/mutual/SignInForm";
 import OTPForm from "./components/mutual/OTPForm";
 import Products from "./pages/customer/Products";
+import AppointmentForm from "./components/customer/Appointment";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<SignInForm />} />
         <Route path="/verifyOtp" element={<OTPForm />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/appointment" element={<AppointmentForm />} />
       </Route>
       <Route path="/admin" element={<Admin />} />
     </Routes>
