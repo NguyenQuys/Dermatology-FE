@@ -16,8 +16,6 @@ const Products: React.FC = () => {
     fetchData();
   }, []);
 
-  console.log(data);
-
   return (
     <div className={styles.snpM}>
       <div className={styles.section2}>

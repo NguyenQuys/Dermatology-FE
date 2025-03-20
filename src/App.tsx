@@ -7,6 +7,9 @@ import SignInForm from "./components/mutual/SignInForm";
 import OTPForm from "./components/mutual/OTPForm";
 import Products from "./pages/customer/Products";
 import AppointmentForm from "./components/customer/Appointment";
+import PrivateRoute from "./components/mutual/PrivateRoute";
+import UnauthorizationForm from "./components/mutual/UnauthorizationForm";
+import Information from "./pages/customer/Information";
 
 function App() {
   return (
@@ -17,8 +20,12 @@ function App() {
         <Route path="/verifyOtp" element={<OTPForm />} />
         <Route path="/products" element={<Products />} />
         <Route path="/appointment" element={<AppointmentForm />} />
+        <Route path="/unauthorized" element={<UnauthorizationForm />} />
+        <Route path="/information" element={<Information />} />
       </Route>
-      <Route path="/admin" element={<Admin />} />
+      <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
+        <Route path="/admin" element={<Admin />} />
+      </Route>
     </Routes>
   );
 }

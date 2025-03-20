@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Navigation_bar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const { user, token, login, logout } = useAuth();
@@ -11,6 +13,10 @@ const Navigation_bar = () => {
     logout();
     navigate("/");
     window.location.reload();
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -75,14 +81,43 @@ const Navigation_bar = () => {
             </Link>
           </div>
         ) : (
-          <div className="sign-in">
-            <a
-              onClick={handleLogout}
-              className="text-danger fw-bold"
-              style={{ cursor: "pointer", textDecoration: "none" }}
+          <div className="position-relative">
+            <div
+              className="fw-bold p-2 rounded text-dark"
+              style={{ cursor: "pointer" }}
+              onClick={toggleDropdown}
             >
-              Đăng xuất
-            </a>
+              Thông tin ⬇
+            </div>
+
+            {isOpen && (
+              <ul
+                className="list-unstyled position-absolute mt-2 bg-white shadow rounded p-2"
+                style={{
+                  minWidth: "150px",
+                  border: "1px solid #ddd",
+                  zIndex: 1,
+                }}
+              >
+                <li className="p-2">
+                  <Link
+                    to="/information"
+                    className="fw-bold text-dark text-decoration-none"
+                  >
+                    Cá nhân
+                  </Link>
+                </li>
+                <li className="p-2">
+                  <a
+                    onClick={handleLogout}
+                    className="text-danger fw-bold"
+                    style={{ cursor: "pointer", textDecoration: "none" }}
+                  >
+                    Đăng xuất
+                  </a>
+                </li>
+              </ul>
+            )}
           </div>
         )}
       </div>

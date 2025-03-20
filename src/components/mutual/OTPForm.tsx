@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import * as showNotification from "../../utils/toast.util";
 import { useOtpAPI } from "../../api/otp.api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const OTPForm = () => {
   const { verifyOtp } = useOtpAPI();
@@ -9,6 +10,7 @@ const OTPForm = () => {
   const [countdown, setCountdown] = useState(10);
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
+  //const { user, token, login, logout } = useAuth();
 
   useEffect(() => {
     if (countdown > 0) {
@@ -17,7 +19,7 @@ const OTPForm = () => {
       }, 1000);
       return () => clearInterval(timer);
     } else {
-      setCanResend(true); // Khi đếm ngược kết thúc, hiển thị nút gửi lại OTP
+      setCanResend(true);
     }
   }, [countdown]);
 
@@ -67,8 +69,8 @@ const OTPForm = () => {
           className="btn btn-primary w-100 mt-3"
           onClick={() => {
             showNotification.showSuccessToast("Mã OTP mới đã được gửi!");
-            setCountdown(10); // Reset lại bộ đếm
-            setCanResend(false); // Ẩn nút gửi lại
+            setCountdown(10);
+            setCanResend(false);
           }}
         >
           Gửi lại mã OTP
