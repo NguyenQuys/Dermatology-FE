@@ -21,7 +21,7 @@ class ComesticAPI {
   async getComesticById(id: string) {
     try {
       const response = await axios.get(`${API_COMESTIC_URL}/getById/${id}`);
-      return response.data;
+      return response;
     } catch (error: any) {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
     }

@@ -96,13 +96,9 @@ let Modal: React.FC<ModalProps> = ({
           dataToSend as unknown as Comestic
         );
       } else if (typeModal === "treatment") {
-        response = await TreatmentAPI.addTreatment(
-          dataToSend as unknown as Treatment
-        );
+        response = await TreatmentAPI.add(dataToSend as unknown as Treatment);
       } else if (typeModal === "medicine") {
-        response = await MedicineAPI.addMedicine(
-          dataToSend as unknown as Medicine
-        );
+        response = await MedicineAPI.add(dataToSend as unknown as Medicine);
       } else if (
         typeModal === "doctor" ||
         typeModal === "pharmacist" ||

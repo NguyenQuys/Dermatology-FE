@@ -4,12 +4,25 @@ import { Medicine } from "../models/medicine.model";
 const API_MEDICINE_URL = "/api/medicine";
 
 class MedicineAPI {
-  async getAllMedicines() {
-    const response = await axios.get(`${API_MEDICINE_URL}/getAll`);
-    return response;
+  async getAll() {
+    try {
+      const response = await axios.get(`${API_MEDICINE_URL}/getAll/`);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
   }
 
-  async addMedicine(medicine: Medicine): Promise<string> {
+  async getById(_id: string) {
+    try {
+      const response = await axios.get(`${API_MEDICINE_URL}/getById/${_id}`);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
+  async add(medicine: Medicine): Promise<string> {
     try {
       const response = await axios.post(`${API_MEDICINE_URL}/add`, medicine);
       return response.data.message;
