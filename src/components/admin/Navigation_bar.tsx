@@ -1,8 +1,19 @@
 import logo from "/src/assets/admin/images/logo.svg";
 import logoMini from "/src/assets/admin/images/logo-mini.svg";
 import face1 from "/src/assets/admin/images/faces/face1.jpg";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function NavigationBar() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
     <nav className="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
       <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
@@ -59,7 +70,9 @@ function NavigationBar() {
             </div>
           </li>
           <li>
-            <a style={{ cursor: "pointer" }}>Đăng xuất</a>
+            <a onClick={handleLogout} style={{ cursor: "pointer" }}>
+              Đăng xuất
+            </a>
           </li>
         </ul>
         <button

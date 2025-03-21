@@ -3,7 +3,11 @@ import "/src/assets/admin/css/App.css";
 import NavigationBar from "./Navigation_bar";
 import Sidebar from "./Sidebar";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useAuth } from "../../hooks/useAuth";
+
 const Content: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <div className="with-welcome-text">
@@ -296,7 +300,7 @@ const Content: React.FC = () => {
             </div>
             {/* partial */}
             {/* partial:partials/_sidebar.html */}
-            <Sidebar />
+            <Sidebar role={user.role} />
             {/* partial */}
             <div className="main-panel">
               {/* content-wrapper ends */}

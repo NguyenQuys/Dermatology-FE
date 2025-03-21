@@ -49,7 +49,7 @@ const Admin: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Star Admin2</title>
+        <title>Admin</title>
         <link rel="shortcut icon" href="/src/assets/admin/images/favicon.png" />
       </Helmet>
       <div className="container-scroller">

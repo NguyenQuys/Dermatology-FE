@@ -3,6 +3,7 @@ import * as showNotification from "../../utils/toast.util";
 import { useOtpAPI } from "../../api/otp.api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { jwtDecode } from "jwt-decode";
 
 const OTPForm = () => {
   const { verifyOtp } = useOtpAPI();
@@ -10,7 +11,6 @@ const OTPForm = () => {
   const [countdown, setCountdown] = useState(10);
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
-  //const { user, token, login, logout } = useAuth();
 
   useEffect(() => {
     if (countdown > 0) {
@@ -34,7 +34,19 @@ const OTPForm = () => {
       const response = await verifyOtp(otpCode);
       if (response.status === 200) {
         showNotification.showSuccessToast(response.data.message);
-        navigate("/");
+        switch (response.data.role) {
+          case "doctor":
+            navigate("/doctor");
+            break;
+          case "admin":
+            navigate("/admin");
+            break;
+          case "pharmacist":
+            navigate("/pharmacist");
+            break;
+          default:
+            navigate("/");
+        }
       } else {
         showNotification.showErrorToast(response.data.message);
       }

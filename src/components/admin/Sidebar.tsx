@@ -5,18 +5,22 @@ import AddButton from "./AddButton";
 
 export let tabIdFromSidebar = "";
 
-function Sidebar() {
+interface SidebarProps {
+  role: string;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ role }) => {
   const [activeTab, setActiveTab] = useState<string>("");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleTabClick = async (tabId: string) => {
-    //if (activeTab === tabId) return;
+    // if (activeTab === tabId) return;
     setActiveTab(tabId);
     setLoading(true);
     setData(null);
 
-    tabIdFromSidebar = tabId; // Để xài đc bên Detail button
+    tabIdFromSidebar = tabId; // Để xài được bên Detail button
 
     try {
       const entities = await services.selectTab(tabId);
@@ -106,111 +110,206 @@ function Sidebar() {
     return userColumns; // default
   };
 
-  return (
-    <>
-      <nav className="sidebar sidebar-offcanvas" id="sidebar">
-        <ul className="nav">
-          <li className="nav-item nav-category p-0">Người dùng</li>
+  const returnAdminSidebar = () => {
+    return (
+      <>
+        <nav className="sidebar sidebar-offcanvas" id="sidebar">
+          <ul className="nav">
+            <li className="nav-item nav-category p-0">Người dùng</li>
 
-          <li className="nav-item">
-            <a
-              className={`nav-link ${
-                activeTab === "nav-doctor-tab" ? "bg-primary text-white" : ""
-              }`}
-              href="#"
-              onClick={() => handleTabClick("nav-doctor-tab")}
-            >
-              <span className="menu-title">Bác sĩ</span>
-            </a>
-          </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-doctor-tab" ? "bg-primary text-white" : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-doctor-tab")}
+              >
+                <span className="menu-title">Bác sĩ</span>
+              </a>
+            </li>
 
-          <li className="nav-item">
-            <a
-              className={`nav-link ${
-                activeTab === "nav-pharmacist-tab"
-                  ? "bg-primary text-white"
-                  : ""
-              }`}
-              href="#"
-              onClick={() => handleTabClick("nav-pharmacist-tab")}
-            >
-              <span className="menu-title">Dược sĩ</span>
-            </a>
-          </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-pharmacist-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-pharmacist-tab")}
+              >
+                <span className="menu-title">Dược sĩ</span>
+              </a>
+            </li>
 
-          <li className="nav-item">
-            <a
-              className={`nav-link ${
-                activeTab === "nav-customer-tab" ? "bg-primary text-white" : ""
-              }`}
-              href="#"
-              onClick={() => handleTabClick("nav-customer-tab")}
-            >
-              <span className="menu-title">Khách hàng</span>
-            </a>
-          </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-customer-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-customer-tab")}
+              >
+                <span className="menu-title">Khách hàng</span>
+              </a>
+            </li>
 
-          <li className="nav-item nav-category">Thuốc - Trị liệu - Mỹ phẩm</li>
+            <li className="nav-item nav-category">
+              Thuốc - Trị liệu - Mỹ phẩm
+            </li>
 
-          <li className="nav-item">
-            <a
-              className={`nav-link ${
-                activeTab === "nav-medicine-tab" ? "bg-primary text-white" : ""
-              }`}
-              href="#"
-              onClick={() => handleTabClick("nav-medicine-tab")}
-            >
-              <span className="menu-title">Thuốc</span>
-            </a>
-          </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-medicine-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-medicine-tab")}
+              >
+                <span className="menu-title">Thuốc</span>
+              </a>
+            </li>
 
-          <li className="nav-item">
-            <a
-              className={`nav-link ${
-                activeTab === "nav-treatment-tab" ? "bg-primary text-white" : ""
-              }`}
-              href="#"
-              onClick={() => handleTabClick("nav-treatment-tab")}
-            >
-              <span className="menu-title">Trị liệu</span>
-            </a>
-          </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-treatment-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-treatment-tab")}
+              >
+                <span className="menu-title">Trị liệu</span>
+              </a>
+            </li>
 
-          <li className="nav-item">
-            <a
-              className={`nav-link ${
-                activeTab === "nav-comestic-tab" ? "bg-primary text-white" : ""
-              }`}
-              href="#"
-              onClick={() => handleTabClick("nav-comestic-tab")}
-            >
-              <span className="menu-title">Mỹ phẩm</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div className="container p-3">
-        <div className="col-lg-12">
-          {activeTab !== "" ? (
-            activeTab !== "nav-customer-tab" ? (
-              <AddButton type={activeTab} handleTabClick={handleTabClick} />
-            ) : null
-          ) : (
-            <h1>Vui lòng chọn tab để hiển thị</h1>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-comestic-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-comestic-tab")}
+              >
+                <span className="menu-title">Mỹ phẩm</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div className="container p-3">
+          <div className="col-lg-12">
+            {activeTab !== "" ? (
+              activeTab !== "nav-customer-tab" ? (
+                <AddButton type={activeTab} handleTabClick={handleTabClick} />
+              ) : null
+            ) : (
+              <h1>Vui lòng chọn tab để hiển thị</h1>
+            )}
+          </div>
+
+          {activeTab !== "" && (
+            <DataTable
+              columns={getColumns() as any}
+              data={data || []}
+              loading={loading}
+              actions={actions}
+            />
           )}
         </div>
+      </>
+    );
+  };
 
-        {activeTab !== "" && (
-          <DataTable
-            columns={getColumns() as any}
-            data={data || []}
-            loading={loading}
-            actions={actions}
-          />
-        )}
-      </div>
-    </>
-  );
-}
+  const returnDoctorSidebar = () => {
+    return (
+      <>
+        <nav className="sidebar sidebar-offcanvas" id="sidebar">
+          <ul className="nav">
+            <li className="nav-item nav-category p-0">Hồ sơ</li>
+
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-doctor-tab" ? "bg-primary text-white" : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-doctor-tab")}
+              >
+                <span className="menu-title">Khám bệnh</span>
+              </a>
+            </li>
+
+            <li className="nav-item nav-category">Lịch làm việc</li>
+
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-medicine-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-medicine-tab")}
+              >
+                <span className="menu-title">Xem lịch</span>
+              </a>
+            </li>
+
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-treatment-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-treatment-tab")}
+              >
+                <span className="menu-title">Đăng ký lịch</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div className="container p-3">
+          <div className="col-lg-12">
+            {activeTab !== "" ? (
+              activeTab !== "nav-customer-tab" ? (
+                <AddButton type={activeTab} handleTabClick={handleTabClick} />
+              ) : null
+            ) : (
+              <h1>Vui lòng chọn tab để hiển thị</h1>
+            )}
+          </div>
+
+          {activeTab !== "" && (
+            <DataTable
+              columns={getColumns() as any}
+              data={data || []}
+              loading={loading}
+              actions={actions}
+            />
+          )}
+        </div>
+      </>
+    );
+  };
+
+  switch (role) {
+    case "admin":
+      return returnAdminSidebar();
+    case "doctor":
+      return returnDoctorSidebar();
+    default:
+      break;
+  }
+};
 
 export default Sidebar;
