@@ -10,7 +10,7 @@ class UserAPI {
     return response;
   }
 
-  async addUser(user: User): Promise<string> {
+  async add(user: User): Promise<string> {
     try {
       const response = await axios.post(`${API_AUTH_URL}/register`, user);
       return response.data.message;
@@ -19,7 +19,7 @@ class UserAPI {
     }
   }
 
-  async getUserById(id: string) {
+  async getById(id: string) {
     try {
       const response = await axios.post(`${API_USER_URL}/getById`, { id });
       return response;

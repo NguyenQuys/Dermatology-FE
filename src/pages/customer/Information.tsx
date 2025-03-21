@@ -23,7 +23,7 @@ const Information = () => {
 
     const fetchUserData = async () => {
       try {
-        const response = await userApi.getUserById(user.id);
+        const response = await userApi.getById(user.id);
         setUserData(response.data);
       } catch (error) {
         console.error("Lỗi khi lấy thông tin người dùng:", error);
@@ -234,6 +234,7 @@ const Information = () => {
                                 : "bg-secondary text-white p-2 rounded"
                             }
                           >
+                            <strong>Tên: </strong>
                             <Link
                               to={
                                 itemRecord[index]
@@ -241,7 +242,6 @@ const Information = () => {
                                   : ""
                               }
                             >
-                              <strong>Tên: </strong>
                               {itemRecord[index]
                                 ? itemRecord[index].itemName
                                 : ""}

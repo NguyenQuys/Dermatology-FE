@@ -115,16 +115,15 @@ const DetailButton: React.FC<DetailButtonProps> = ({
     const fetchData = async () => {
       try {
         const apiMap: Record<string, any> = {
-          "nav-pharmacist-tab": UserAPI.getUserById,
-          "nav-doctor-tab": UserAPI.getUserById,
-          "nav-customer-tab": UserAPI.getUserById,
+          "nav-pharmacist-tab": UserAPI.getById,
+          "nav-doctor-tab": UserAPI.getById,
+          "nav-customer-tab": UserAPI.getById,
         };
 
         const apiFunction = apiMap[tabIdFromSidebar];
         if (apiFunction) {
           const response = await apiFunction(idItem);
-          console.log("Dữ liệu từ API:", response);
-          setData(response);
+          setData(response.data);
         }
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);

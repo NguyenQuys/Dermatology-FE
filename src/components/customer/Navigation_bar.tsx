@@ -11,6 +11,7 @@ const Navigation_bar = () => {
 
   const handleLogout = () => {
     logout();
+    setIsOpen(false);
     navigate("/");
     window.location.reload();
   };
@@ -81,9 +82,9 @@ const Navigation_bar = () => {
             </Link>
           </div>
         ) : (
-          <div className="position-relative">
+          <div className="sign-in">
             <div
-              className="fw-bold p-2 rounded text-dark"
+              className="fw-bold text-dark"
               style={{ cursor: "pointer" }}
               onClick={toggleDropdown}
             >
@@ -92,17 +93,19 @@ const Navigation_bar = () => {
 
             {isOpen && (
               <ul
-                className="list-unstyled position-absolute mt-2 bg-white shadow rounded p-2"
+                className="list-unstyled position-absolute bg-white shadow rounded p-2"
                 style={{
                   minWidth: "150px",
                   border: "1px solid #ddd",
                   zIndex: 1,
+                  marginTop: "150px",
                 }}
               >
                 <li className="p-2">
                   <Link
                     to="/information"
                     className="fw-bold text-dark text-decoration-none"
+                    onClick={() => setIsOpen(false)}
                   >
                     Cá nhân
                   </Link>

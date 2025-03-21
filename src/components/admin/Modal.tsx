@@ -106,7 +106,7 @@ let Modal: React.FC<ModalProps> = ({
       ) {
         dataToSend.role = typeModal;
         dataToSend.gender = gender;
-        response = await UserAPI.addUser(dataToSend as unknown as User);
+        response = await UserAPI.add(dataToSend as unknown as User);
       }
 
       showNotification.showSuccessToast(response);

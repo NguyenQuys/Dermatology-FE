@@ -29,10 +29,8 @@ export const getAll = async (type: string) => {
       response = await UserAPI.getAllUsersByRole("pharmacist");
     else if (type === "customer")
       response = await UserAPI.getAllUsersByRole("customer");
-    else if (type === "medicine")
-      response = await MedicineApi.getAllMedicines();
-    else if (type === "treatment")
-      response = await TreatmentApi.getAllTreatments();
+    else if (type === "medicine") response = await MedicineApi.getAll();
+    else if (type === "treatment") response = await TreatmentApi.getAll();
     else response = await ComesticAPI.getAllCometics();
 
     await new Promise((resolve) => setTimeout(resolve, 200));

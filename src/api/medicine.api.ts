@@ -6,7 +6,7 @@ const API_MEDICINE_URL = "/api/medicine";
 class MedicineAPI {
   async getAll() {
     try {
-      const response = await axios.get(`${API_MEDICINE_URL}/getAll/`);
+      const response = await axios.get(`${API_MEDICINE_URL}/getAll`);
       return response;
     } catch (error: any) {
       return error.response;
