@@ -26,6 +26,15 @@ class ComesticAPI {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
     }
   }
+
+  async search(name: string) {
+    try {
+      const response = await axios.post(`${API_COMESTIC_URL}/search`, { name });
+      return response;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
 }
 
 export default new ComesticAPI();
