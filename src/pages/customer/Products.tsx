@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const Products: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Lưu giá trị nhập vào ô tìm kiếm
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 

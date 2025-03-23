@@ -5,6 +5,7 @@ import AddButton from "./AddButton";
 import ScheduleAPI from "../../api/schedule.api";
 import { useAuth } from "../../hooks/useAuth";
 import Calendar from "../mutual/Calendar";
+import Examination from "../doctor/Examination";
 
 export let tabIdFromSidebar = "";
 
@@ -27,6 +28,8 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
 
     try {
       if (tabId === "nav-schedule-tab") {
+        getColumns();
+      } else if (tabId === "nav-examination-tab") {
         getColumns();
       } else {
         const entities = await services.selectTab(tabId);
@@ -112,7 +115,10 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
       return medicineColumns;
     } else if (activeTab === "nav-treatment-tab") {
       return treatmentColumns;
+      // for doctor role
     } else if (activeTab === "nav-schedule-tab") {
+      return;
+    } else if (activeTab === "nav-examination-tab") {
       return;
     }
   };
@@ -120,6 +126,8 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
   let contentToRender: React.ReactNode;
   if (activeTab === "nav-schedule-tab") {
     contentToRender = <Calendar />;
+  } else if (activeTab === "nav-examination-tab") {
+    contentToRender = <Examination />;
   } else if (activeTab !== "") {
     contentToRender = (
       <DataTable
@@ -260,10 +268,12 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             <li className="nav-item">
               <a
                 className={`nav-link ${
-                  activeTab === "nav-doctor-tab" ? "bg-primary text-white" : ""
+                  activeTab === "nav-examination-tab"
+                    ? "bg-primary text-white"
+                    : ""
                 }`}
                 href="#"
-                onClick={() => handleTabClick("nav-doctor-tab")}
+                onClick={() => handleTabClick("nav-examination-tab")}
               >
                 <span className="menu-title">Khám bệnh</span>
               </a>
