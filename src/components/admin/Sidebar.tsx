@@ -2,6 +2,9 @@ import { useState } from "react";
 import * as services from "../../api/general.api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
+import ScheduleAPI from "../../api/schedule.api";
+import { useAuth } from "../../hooks/useAuth";
+import Calendar from "../mutual/Calendar";
 
 export let tabIdFromSidebar = "";
 
@@ -13,7 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
   const [activeTab, setActiveTab] = useState<string>("");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
+  let { user } = useAuth();
   const handleTabClick = async (tabId: string) => {
     // if (activeTab === tabId) return;
     setActiveTab(tabId);
@@ -23,8 +26,12 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     tabIdFromSidebar = tabId; // Để xài được bên Detail button
 
     try {
-      const entities = await services.selectTab(tabId);
-      setData(entities);
+      if (tabId === "nav-schedule-tab") {
+        getColumns();
+      } else {
+        const entities = await services.selectTab(tabId);
+        setData(entities);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -105,11 +112,26 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
       return medicineColumns;
     } else if (activeTab === "nav-treatment-tab") {
       return treatmentColumns;
+    } else if (activeTab === "nav-schedule-tab") {
+      return;
     }
-
-    return userColumns; // default
   };
 
+  let contentToRender: React.ReactNode;
+  if (activeTab === "nav-schedule-tab") {
+    contentToRender = <Calendar />;
+  } else if (activeTab !== "") {
+    contentToRender = (
+      <DataTable
+        columns={getColumns() as any}
+        data={data || []}
+        loading={loading}
+        actions={actions}
+      />
+    );
+  }
+
+  // return roles components
   const returnAdminSidebar = () => {
     return (
       <>
@@ -252,28 +274,14 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             <li className="nav-item">
               <a
                 className={`nav-link ${
-                  activeTab === "nav-medicine-tab"
+                  activeTab === "nav-schedule-tab"
                     ? "bg-primary text-white"
                     : ""
                 }`}
                 href="#"
-                onClick={() => handleTabClick("nav-medicine-tab")}
+                onClick={() => handleTabClick("nav-schedule-tab")}
               >
                 <span className="menu-title">Xem lịch</span>
-              </a>
-            </li>
-
-            <li className="nav-item">
-              <a
-                className={`nav-link ${
-                  activeTab === "nav-treatment-tab"
-                    ? "bg-primary text-white"
-                    : ""
-                }`}
-                href="#"
-                onClick={() => handleTabClick("nav-treatment-tab")}
-              >
-                <span className="menu-title">Đăng ký lịch</span>
               </a>
             </li>
           </ul>
@@ -289,14 +297,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             )}
           </div>
 
-          {activeTab !== "" && (
-            <DataTable
-              columns={getColumns() as any}
-              data={data || []}
-              loading={loading}
-              actions={actions}
-            />
-          )}
+          {contentToRender}
         </div>
       </>
     );
@@ -340,12 +341,12 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             <li className="nav-item">
               <a
                 className={`nav-link ${
-                  activeTab === "nav-treatment-tab"
+                  activeTab === "nav-register-schedule-tab"
                     ? "bg-primary text-white"
                     : ""
                 }`}
                 href="#"
-                onClick={() => handleTabClick("nav-treatment-tab")}
+                onClick={() => handleTabClick("nav-register-schedule-tab")}
               >
                 <span className="menu-title">Đăng ký lịch</span>
               </a>
