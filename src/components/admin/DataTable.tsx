@@ -4,7 +4,7 @@ import DetailButton from "./DetailButton";
 interface Column {
   header: string;
   accessor: string;
-  render?: (value: any, item: any, index?: number) => React.ReactNode;
+  render?: (value: any, item: any, index: number) => React.ReactNode;
 }
 
 interface DataTableProps {
@@ -15,8 +15,8 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({
-  columns,
-  data,
+  columns = [],
+  data = [],
   loading,
   actions,
 }) => {
@@ -30,6 +30,10 @@ const DataTable: React.FC<DataTableProps> = ({
   const handleCloseModal = () => {
     setOpenModalIndex(null);
   };
+
+  if (!columns || columns.length === 0) {
+    return <div>Không có dữ liệu để hiển thị</div>;
+  }
 
   return (
     <div className="table-responsive pt-3">
@@ -54,7 +58,7 @@ const DataTable: React.FC<DataTableProps> = ({
                 Đang tải dữ liệu...
               </td>
             </tr>
-          ) : data.length > 0 ? (
+          ) : data && data.length > 0 ? (
             data.map((item, index) => (
               <tr key={index}>
                 {columns.map((column, colIndex) => (
@@ -64,25 +68,27 @@ const DataTable: React.FC<DataTableProps> = ({
                       : item[column.accessor]}
                   </td>
                 ))}
-                <td>
-                  <button
-                    className="btn btn-info"
-                    onClick={() => handleOpenModal(index)}
-                  >
-                    Chi tiết
-                  </button>
+                {actions && (
+                  <td>
+                    <button
+                      className="btn btn-info"
+                      onClick={() => handleOpenModal(index)}
+                    >
+                      Chi tiết
+                    </button>
 
-                  {/* Modal is only rendered when its index matches the open one */}
-                  {openModalIndex === index && (
-                    <DetailButton
-                      type="doctor"
-                      isOpen={true}
-                      onClose={handleCloseModal}
-                      title="Chi tiết"
-                      idItem={item._id}
-                    />
-                  )}
-                </td>
+                    {/* Modal is only rendered when its index matches the open one */}
+                    {openModalIndex === index && (
+                      <DetailButton
+                        type="doctor"
+                        isOpen={true}
+                        onClose={handleCloseModal}
+                        title="Chi tiết"
+                        idItem={item._id}
+                      />
+                    )}
+                  </td>
+                )}
               </tr>
             ))
           ) : (

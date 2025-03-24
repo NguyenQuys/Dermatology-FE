@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as services from "../../api/general.api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
@@ -6,30 +6,58 @@ import ScheduleAPI from "../../api/schedule.api";
 import { useAuth } from "../../hooks/useAuth";
 import Calendar from "../mutual/Calendar";
 import Examination from "../doctor/Examination";
+import Queue from "../mutual/Queue";
+import AppointmentPharmacist from "../mutual/AppointmentPharmacist";
 
 export let tabIdFromSidebar = "";
+let sidebarUpdateCallback: (() => void) | null = null;
+
+export const setTabId = (tabId: string) => {
+  tabIdFromSidebar = tabId;
+  if (sidebarUpdateCallback) {
+    sidebarUpdateCallback();
+  }
+};
 
 interface SidebarProps {
-  role: string;
+  tabId?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ role }) => {
-  const [activeTab, setActiveTab] = useState<string>("");
+const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
+  const [activeTab, setActiveTab] = useState<string>(tabId || "");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   let { user } = useAuth();
+
+  useEffect(() => {
+    sidebarUpdateCallback = () => {
+      setActiveTab(tabIdFromSidebar);
+      handleTabClick(tabIdFromSidebar);
+    };
+
+    return () => {
+      sidebarUpdateCallback = null;
+    };
+  }, []);
+
   const handleTabClick = async (tabId: string) => {
     // if (activeTab === tabId) return;
     setActiveTab(tabId);
     setLoading(true);
     setData(null);
 
+    console.log(tabId);
+
     tabIdFromSidebar = tabId; // Để xài được bên Detail button
 
     try {
       if (tabId === "nav-schedule-tab") {
         getColumns();
+      } else if (tabId === "nav-queue-tab") {
+        getColumns();
       } else if (tabId === "nav-examination-tab") {
+        getColumns();
+      } else if (tabId === "nav-appointment-tab") {
         getColumns();
       } else {
         const entities = await services.selectTab(tabId);
@@ -116,10 +144,6 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     } else if (activeTab === "nav-treatment-tab") {
       return treatmentColumns;
       // for doctor role
-    } else if (activeTab === "nav-schedule-tab") {
-      return;
-    } else if (activeTab === "nav-examination-tab") {
-      return;
     }
   };
 
@@ -128,15 +152,10 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     contentToRender = <Calendar />;
   } else if (activeTab === "nav-examination-tab") {
     contentToRender = <Examination />;
-  } else if (activeTab !== "") {
-    contentToRender = (
-      <DataTable
-        columns={getColumns() as any}
-        data={data || []}
-        loading={loading}
-        actions={actions}
-      />
-    );
+  } else if (activeTab === "nav-queue-tab") {
+    contentToRender = <Queue />;
+  } else if (activeTab === "nav-appointment-tab") {
+    contentToRender = <AppointmentPharmacist />;
   }
 
   // return roles components
@@ -236,13 +255,13 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         </nav>
         <div className="container p-3">
           <div className="col-lg-12">
-            {activeTab !== "" ? (
+            {/*{activeTab !== "" ? (
               activeTab !== "nav-customer-tab" ? (
                 <AddButton type={activeTab} handleTabClick={handleTabClick} />
               ) : null
             ) : (
               <h1>Vui lòng chọn tab để hiển thị</h1>
-            )}
+            )}*/}
           </div>
 
           {activeTab !== "" && (
@@ -278,6 +297,17 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                 <span className="menu-title">Khám bệnh</span>
               </a>
             </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-queue-tab" ? "bg-primary text-white" : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-queue-tab")}
+              >
+                <span className="menu-title">Hàng đợi</span>
+              </a>
+            </li>
 
             <li className="nav-item nav-category">Lịch làm việc</li>
 
@@ -298,13 +328,13 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         </nav>
         <div className="container p-3">
           <div className="col-lg-12">
-            {activeTab !== "" ? (
+            {/*{activeTab !== "" ? (
               activeTab !== "nav-customer-tab" ? (
                 <AddButton type={activeTab} handleTabClick={handleTabClick} />
               ) : null
             ) : (
               <h1>Vui lòng chọn tab để hiển thị</h1>
-            )}
+            )}*/}
           </div>
 
           {contentToRender}
@@ -323,12 +353,14 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             <li className="nav-item">
               <a
                 className={`nav-link ${
-                  activeTab === "nav-doctor-tab" ? "bg-primary text-white" : ""
+                  activeTab === "nav-appointment-tab"
+                    ? "bg-primary text-white"
+                    : ""
                 }`}
                 href="#"
-                onClick={() => handleTabClick("nav-doctor-tab")}
+                onClick={() => handleTabClick("nav-appointment-tab")}
               >
-                <span className="menu-title">Khám bệnh</span>
+                <span className="menu-title">Cuộc hẹn</span>
               </a>
             </li>
 
@@ -365,29 +397,33 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         </nav>
         <div className="container p-3">
           <div className="col-lg-12">
-            {activeTab !== "" ? (
+            {/*{activeTab !== "" ? (
               activeTab !== "nav-customer-tab" ? (
                 <AddButton type={activeTab} handleTabClick={handleTabClick} />
               ) : null
             ) : (
               <h1>Vui lòng chọn tab để hiển thị</h1>
-            )}
+            )}*/}
           </div>
 
-          {activeTab !== "" && (
+          {activeTab === "treatment" ||
+          activeTab === "medicine" ||
+          activeTab === "comestic" ? (
             <DataTable
               columns={getColumns() as any}
               data={data || []}
               loading={loading}
               actions={actions}
             />
+          ) : (
+            contentToRender
           )}
         </div>
       </>
     );
   };
 
-  switch (role) {
+  switch (user.role) {
     case "admin":
       return returnAdminSidebar();
     case "doctor":

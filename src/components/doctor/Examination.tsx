@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ComesticApi from "../../api/comestic.api";
-import { Link } from "react-router-dom";
 
 // Định nghĩa kiểu dữ liệu cho sản phẩm
 interface Product {

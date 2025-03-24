@@ -4,6 +4,36 @@ import { Appointment } from "../models/appointment.model";
 const API_APPOINTMENT_URL = "/api/appointment";
 
 class AppointmentAPI {
+  async getAll() {
+    try {
+      const response = await axios.get(`${API_APPOINTMENT_URL}/getAll`);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
+  async getByStatus(status: string) {
+    try {
+      const response = await axios.get(
+        `${API_APPOINTMENT_URL}/getByStatus/${status}`
+      );
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+  async update(_id: string, status: string) {
+    try {
+      const response = await axios.put(`${API_APPOINTMENT_URL}/update/${_id}`, {
+        status: status,
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
   async createAppointment(appointment: Appointment) {
     try {
       const response = await axios.post(
