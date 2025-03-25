@@ -27,9 +27,11 @@ class ComesticAPI {
     }
   }
 
-  async search(name: string) {
+  async searchByName(name: string) {
     try {
-      const response = await axios.post(`${API_COMESTIC_URL}/search`, { name });
+      const response = await axios.post(`${API_COMESTIC_URL}/searchByName`, {
+        name,
+      });
       return response;
     } catch (error: any) {
       return error.response?.data?.message || "Đã xảy ra lỗi!";

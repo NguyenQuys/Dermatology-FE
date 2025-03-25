@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { showSuccessToast, showErrorToast } from "../../utils/toast.util";
 import { useAuth } from "../../hooks/useAuth";
 import AppointmentAPI from "../../api/appointment.api";
-import { showSuccessToast, showErrorToast } from "../../utils/toast.util";
 import userApi from "../../api/user.api";
 import MedicalRecordAPI from "../../api/medical_record.api";
 import { setTabId } from "../admin/Sidebar";
@@ -27,39 +27,41 @@ interface MedicalRecord {
   createdAt: string;
 }
 
-const Queue = () => {
-  const [data, setData] = useState<Appointment[]>([]);
-  const [userNames, setUserNames] = useState<{
-    [key: string]: string;
-  }>({});
-  const [selectedAppointment, setSelectedAppointment] = useState<string | null>(
+export let appointmentIdFromQueue = "";
+
+const AppointmentQueue = () => {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [customerName, setCustomerName] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
     null
   );
   const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchAppointments = async () => {
+  const loadAppointments = async () => {
     try {
       setLoading(true);
       const response = await AppointmentAPI.getByStatus("move_to_queue");
-      setData(response.data);
+      setAppointments(response.data);
 
-      const uniqueUserIds = new Set([
-        ...response.data.map((app: Appointment) => app.customer_id),
-      ]);
+      const uniqueUserIds = new Set(
+        response.data.map((app: Appointment) => app.customer_id)
+      );
 
       const namePromises = Array.from(uniqueUserIds).map(async (userId) => {
-        const userResponse = await userApi.getById(userId);
+        const userResponse = await userApi.getById(userId as string);
         return { id: userId, name: userResponse.data.name };
       });
 
       const userNames = await Promise.all(namePromises);
       const nameMap = userNames.reduce((acc, { id, name }) => {
-        acc[id] = name;
+        acc[id as string] = name;
         return acc;
       }, {} as { [key: string]: string });
 
-      setUserNames(nameMap);
+      setCustomerName(nameMap);
     } catch (error: any) {
       showErrorToast(error.response.data.message);
     } finally {
@@ -67,14 +69,18 @@ const Queue = () => {
     }
   };
 
-  const fetchMedicalRecords = async (customerId: string) => {
+  const loadMedicalRecordsByCustomerId = async (
+    customerId: string,
+    appointmentId: string
+  ) => {
     try {
       setLoading(true);
       const response = await MedicalRecordAPI.getMedical_recordByIdCustomer(
         customerId
       );
       setMedicalRecords(response.data);
-      setSelectedAppointment(customerId);
+      setSelectedCustomerId(customerId);
+      appointmentIdFromQueue = appointmentId;
     } catch (error: any) {
       showErrorToast(error.response.data.message);
     } finally {
@@ -83,10 +89,10 @@ const Queue = () => {
   };
 
   useEffect(() => {
-    fetchAppointments();
+    loadAppointments();
   }, []);
 
-  const handleChangeStatus = async (
+  const updateAppointmentStatus = async (
     appointmentId: string,
     newStatus: string
   ) => {
@@ -94,7 +100,7 @@ const Queue = () => {
       const response = await AppointmentAPI.update(appointmentId, newStatus);
       if (response.status === 200) {
         showSuccessToast(response.data.message);
-        fetchAppointments();
+        loadAppointments();
       }
     } catch (error: any) {
       showErrorToast(error.response.data.message);
@@ -128,16 +134,21 @@ const Queue = () => {
         <div className="col-md-6">
           <h2 className="mb-4">Hàng đợi</h2>
           <div className="col-md-6">
-            {data.map((appointment) => (
+            {appointments.map((appointment) => (
               <div
                 key={appointment._id}
                 className="col-12 mb-4"
                 style={{ cursor: "pointer" }}
-                onClick={() => fetchMedicalRecords(appointment.customer_id)}
+                onClick={() =>
+                  loadMedicalRecordsByCustomerId(
+                    appointment.customer_id,
+                    appointment._id
+                  )
+                }
               >
                 <div
                   className={`card h-100 shadow-sm ${
-                    selectedAppointment === appointment.customer_id
+                    selectedCustomerId === appointment.customer_id
                       ? "border-primary"
                       : ""
                   }`}
@@ -152,7 +163,7 @@ const Queue = () => {
                       <p className="card-text mb-1">
                         <i className="bi bi-person me-2"></i>
                         Khách hàng:{" "}
-                        {userNames[appointment.customer_id] || "Đang tải..."}
+                        {customerName[appointment.customer_id] || "Đang tải..."}
                       </p>
                     </div>
                   </div>
@@ -162,7 +173,7 @@ const Queue = () => {
           </div>
         </div>
         <div className="col-md-6">
-          {selectedAppointment && (
+          {selectedCustomerId && (
             <div>
               <h3 className="mb-3">Lịch sử khám bệnh</h3>
               {medicalRecords.map((record) => (
@@ -207,7 +218,12 @@ const Queue = () => {
           )}
           <button
             className="btn btn-primary"
-            onClick={() => setTabId("nav-examination-tab")}
+            onClick={() =>
+              setTabId(
+                "nav-examination-tab",
+                selectedCustomerId ? selectedCustomerId : ""
+              )
+            }
           >
             Khám bệnh
           </button>
@@ -217,4 +233,4 @@ const Queue = () => {
   );
 };
 
-export default Queue;
+export default AppointmentQueue;

@@ -15,6 +15,15 @@ class Medical_recordAPI {
       throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
     }
   }
+
+  async add(data: any) {
+    try {
+      const response = await axios.post(`${API_MEDICAL_RECORD_DATA}/add`, data);
+      return response;
+    } catch (error: any) {
+      throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
+    }
+  }
 }
 
 export default new Medical_recordAPI();

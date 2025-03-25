@@ -18,6 +18,17 @@ class TreatmentAPI {
     }
   }
 
+  async searchByName(name: string) {
+    try {
+      const response = await axios.post(`${API_TREATMENT_URL}/searchByName`, {
+        name,
+      });
+      return response;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
+
   async add(treatment: Treatment): Promise<string> {
     try {
       const response = await axios.post(`${API_TREATMENT_URL}/add`, treatment);

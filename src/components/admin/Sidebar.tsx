@@ -6,16 +6,16 @@ import ScheduleAPI from "../../api/schedule.api";
 import { useAuth } from "../../hooks/useAuth";
 import Calendar from "../mutual/Calendar";
 import Examination from "../doctor/Examination";
-import Queue from "../mutual/Queue";
+import Queue from "../mutual/AppointmentQueue";
 import AppointmentPharmacist from "../mutual/AppointmentPharmacist";
 
 export let tabIdFromSidebar = "";
-let sidebarUpdateCallback: (() => void) | null = null;
+let sidebarUpdateCallback: ((customerId?: string) => void) | null = null;
 
-export const setTabId = (tabId: string) => {
+export const setTabId = (tabId: string, selectedCustomerId?: string) => {
   tabIdFromSidebar = tabId;
   if (sidebarUpdateCallback) {
-    sidebarUpdateCallback();
+    sidebarUpdateCallback(selectedCustomerId);
   }
 };
 
@@ -27,10 +27,13 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
   const [activeTab, setActiveTab] = useState<string>(tabId || "");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string>("");
   let { user } = useAuth();
 
   useEffect(() => {
-    sidebarUpdateCallback = () => {
+    sidebarUpdateCallback = (selectedCustomerId?: string) => {
+      setSelectedCustomerId(selectedCustomerId || "");
+
       setActiveTab(tabIdFromSidebar);
       handleTabClick(tabIdFromSidebar);
     };
@@ -151,7 +154,7 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
   if (activeTab === "nav-schedule-tab") {
     contentToRender = <Calendar />;
   } else if (activeTab === "nav-examination-tab") {
-    contentToRender = <Examination />;
+    contentToRender = <Examination customerId={selectedCustomerId} />;
   } else if (activeTab === "nav-queue-tab") {
     contentToRender = <Queue />;
   } else if (activeTab === "nav-appointment-tab") {

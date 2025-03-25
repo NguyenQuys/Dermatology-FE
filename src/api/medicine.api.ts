@@ -22,6 +22,17 @@ class MedicineAPI {
     }
   }
 
+  async searchByName(name: string) {
+    try {
+      const response = await axios.post(`${API_MEDICINE_URL}/searchByName`, {
+        name,
+      });
+      return response;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
+
   async add(medicine: Medicine): Promise<string> {
     try {
       const response = await axios.post(`${API_MEDICINE_URL}/add`, medicine);
