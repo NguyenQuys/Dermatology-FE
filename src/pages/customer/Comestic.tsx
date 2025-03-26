@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "/src/assets/customer/products/css/style.module.css";
-import "/src/assets/customer/products/css/vars.css";
-
+import styles from "/src/assets/customer/comestic/css/style.module.css";
+import "/src/assets/customer/comestic/css/vars.css";
 import comesticApi from "../../api/comestic.api";
 import { Link } from "react-router-dom";
 
-const Products: React.FC = () => {
+const Comestic: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -33,7 +32,7 @@ const Products: React.FC = () => {
 
     const delaySearch = setTimeout(async () => {
       try {
-        const response = await comesticApi.search(searchQuery);
+        const response = await comesticApi.searchByName(searchQuery);
         setSearchResults(response.data);
         setShowDropdown(response.data.length > 0);
       } catch (error) {
@@ -117,13 +116,13 @@ const Products: React.FC = () => {
           <div className={styles.skinType}>
             {data.map((comestic) => (
               <Link
-                to={`/products/${comestic._id}`}
+                to={`/comestic/${comestic._id}`}
                 className={styles.snp3}
                 key={comestic._id}
               >
                 <img
                   className={styles.frame6}
-                  src="/src/assets/customer/products/images/frame-60.png"
+                  src={comestic.image}
                   alt={comestic.name}
                 />
                 <div className={styles.frame7}>
@@ -140,7 +139,7 @@ const Products: React.FC = () => {
                   </div>
                   <img
                     className={styles.coin1}
-                    src="/src/assets/customer/products/images/coin-1-10.png"
+                    src="/src/assets/customer/comestic/images/coin-1-10.png"
                     alt="Price"
                   />
                   <div className={styles.giaBan250000}>
@@ -148,12 +147,12 @@ const Products: React.FC = () => {
                   </div>
                   <img
                     className={styles.carts1}
-                    src="/src/assets/customer/products/images/carts-10.png"
+                    src="/src/assets/customer/comestic/images/carts-10.png"
                     alt="Add to cart"
                   />
                   <img
                     className={styles.star11}
-                    src="/src/assets/customer/products/images/star-110.svg"
+                    src="/src/assets/customer/comestic/images/star-110.svg"
                     alt="Rating"
                   />
                   <div className={styles.rating}>{comestic.averageRating}</div>
@@ -167,4 +166,4 @@ const Products: React.FC = () => {
   );
 };
 
-export default Products;
+export default Comestic;

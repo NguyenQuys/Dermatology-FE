@@ -43,7 +43,7 @@ const Navigation_bar = () => {
             Trang chủ
           </Link>
           <Link
-            to="/products"
+            to="/comestic"
             className="s-n-ph-m2"
             style={{ textDecoration: "none" }}
           >
