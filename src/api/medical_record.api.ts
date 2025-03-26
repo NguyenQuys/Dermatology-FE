@@ -16,8 +16,22 @@ class Medical_recordAPI {
     }
   }
 
-  async add(data: any) {
+  async getById(_id: string) {
     try {
+      const response = await axios.get(
+        `${API_MEDICAL_RECORD_DATA}/getById/${_id}`
+      );
+      return response;
+    } catch (error: any) {
+      throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
+    }
+  }
+  async add(data: any, appointmentId?: string) {
+    try {
+      if (appointmentId) {
+        data.appointment_id = appointmentId;
+      }
+
       const response = await axios.post(`${API_MEDICAL_RECORD_DATA}/add`, data);
       return response;
     } catch (error: any) {

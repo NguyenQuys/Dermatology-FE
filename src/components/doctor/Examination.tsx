@@ -56,17 +56,6 @@ const Examination: React.FC<ExaminationProps> = ({
   appointmentId,
 }) => {
   const { user } = useAuth();
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([
-    {
-      id: Date.now(),
-      searchQuery: "",
-      selectedProduct: "",
-      searchResults: [],
-      category: "",
-      dosage: "",
-      frequency: "",
-    },
-  ]);
   const [formData, setFormData] = useState<FormData>({
     customer_id: customerId || "",
     doctor_id: user?._id || "",
@@ -175,42 +164,6 @@ const Examination: React.FC<ExaminationProps> = ({
     }));
   };
 
-  useEffect(() => {
-    prescriptions.forEach((prescription) => {
-      if (!prescription.searchQuery.trim()) {
-        setPrescriptions((prev) =>
-          prev.map((p) =>
-            p.id === prescription.id ? { ...p, searchResults: [] } : p
-          )
-        );
-        return;
-      }
-
-      const delaySearch = setTimeout(async () => {
-        try {
-          const response = await ComesticApi.searchByName(
-            prescription.searchQuery
-          );
-          setPrescriptions((prev) =>
-            prev.map((p) =>
-              p.id === prescription.id
-                ? { ...p, searchResults: response.data }
-                : p
-            )
-          );
-        } catch (error) {
-          console.error("Lỗi khi tìm kiếm:", error);
-          setPrescriptions((prev) =>
-            prev.map((p) =>
-              p.id === prescription.id ? { ...p, searchResults: [] } : p
-            )
-          );
-        }
-      }, 300);
-      return () => clearTimeout(delaySearch);
-    });
-  }, [prescriptions.map((p) => p.searchQuery).join()]);
-
   const handleProductSelect = (index: number, product: Product) => {
     setFormData((prev) => ({
       ...prev,
@@ -256,7 +209,10 @@ const Examination: React.FC<ExaminationProps> = ({
 
     setLoading(true);
     try {
-      const response = await MedicalRecordAPI.add(formData);
+      const response = await MedicalRecordAPI.add(
+        formData,
+        appointmentIdFromQueue
+      );
       if (response.status === 201) {
         showSuccessToast("Tạo hồ sơ khám bệnh thành công");
         setFormData({
@@ -268,7 +224,7 @@ const Examination: React.FC<ExaminationProps> = ({
         });
       }
       // Update appointment status to completed
-      await AppointmentApi.update(appointmentIdFromQueue, "completed");
+      await AppointmentApi.update(appointmentIdFromQueue, "examined");
     } catch (error: any) {
       showErrorToast(error.response?.data?.message || "Có lỗi xảy ra");
     } finally {
