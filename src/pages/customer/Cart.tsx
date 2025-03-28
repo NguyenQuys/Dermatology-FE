@@ -105,7 +105,13 @@ const Cart: React.FC = () => {
               <h2 className="mb-0">Giỏ Hàng</h2>
             </div>
             <div className="text-end d-flex align-items-center gap-3">
-              <button className="btn btn-primary">Thanh toán</button>
+              <Link
+                to="/payment"
+                state={{ cartData: cart }}
+                className="btn btn-primary"
+              >
+                Thanh toán
+              </Link>
               <h4 className="text-danger mb-0">
                 Tổng số sản phẩm: {calculateTotal()}
               </h4>

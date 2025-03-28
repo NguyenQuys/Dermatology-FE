@@ -1,7 +1,9 @@
 import styles from "../../assets/customer/payment/style.module.css";
 import CityAPI from "../../api/city.api";
 import { useEffect, useState } from "react";
-
+import { replace, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import UserAPI from "../../api/user.api";
 interface Province {
   code: string;
   name: string;
@@ -12,26 +14,22 @@ interface District {
   name: string;
 }
 
-const products = [
-  {
-    id: 1,
-    name: "Sữa rửa mặt",
-    description: "Làm sạch làn da",
-    price: 150000,
-    quantity: 2,
-    image: "/src/assets/general/pic1.jpg",
-  },
-  {
-    id: 2,
-    name: "Nước tẩy trang",
-    description: "Làm sạch, dưỡng ẩm làn da",
-    price: 200000,
-    quantity: 1,
-    image: "/src/assets/general/pic1.jpg",
-  },
-];
+interface CartItem {
+  _id: string;
+  comestic_id: string;
+  comestic_image: string;
+  price: number;
+  quantity: number;
+  comestic_name: string;
+}
 
-const ProductItem = ({ product }: { product: any }) => {
+interface CartData {
+  _id: string;
+  customer_id: string;
+  items: CartItem[];
+}
+
+const ProductItem = ({ product }: { product: CartItem }) => {
   return (
     <div className={styles.frame23}>
       <div className="row">
@@ -40,17 +38,15 @@ const ProductItem = ({ product }: { product: any }) => {
             className="rounded-4"
             width={150}
             height={200}
-            src={product.image}
-            alt={product.name}
+            src={product.comestic_image}
+            alt={product.comestic_name}
           />
         </div>
         <div className="col-md-7">
           <div className={styles.productInfo}>
             <div className={styles.productName}>
-              <span className={styles.productNameMain}>{product.name}</span>
-              <br />
-              <span className={styles.productNameSub}>
-                {product.description}
+              <span className={styles.productNameMain}>
+                {product.comestic_name}
               </span>
             </div>
             <div className={styles.price}>
@@ -68,26 +64,40 @@ const ProductItem = ({ product }: { product: any }) => {
 };
 
 const Payment = () => {
+  const { user } = useAuth();
+  const location = useLocation();
+  const cartData = location.state?.cartData as CartData;
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [selectedProvince, setSelectedProvince] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const shippingFee = 30000;
-  const totalAmount =
-    products.reduce((sum, p) => sum + p.price * p.quantity, 0) + shippingFee;
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [pointToUse, setPointToUse] = useState<number>(0);
+  const [pointError, setPointError] = useState<string>("");
+  const [discountLevel, setDiscountLevel] = useState<number>(0);
+  let [shippingFee, setShippingFee] = useState<number>(0);
+  let [totalAmount, setTotalAmount] = useState<number>(0);
 
   const handlePaymentMethod = (method: string) => {
     setPaymentMethod(method);
 
     if (method === "delivery") {
+      setShippingFee(30000);
+
       const fetchProvinces = async () => {
         const provinces = await CityAPI.getAllCity();
         setProvinces(provinces);
       };
       fetchProvinces();
       inputAddress();
+    } else {
+      setShippingFee(0);
     }
+    setTotalAmount(
+      cartData?.items.reduce((sum, p) => sum + p.price * p.quantity, 0) +
+        shippingFee || 0
+    );
   };
 
   useEffect(() => {
@@ -95,7 +105,13 @@ const Payment = () => {
       const districts = await CityAPI.getDistricts(selectedProvince);
       setDistricts(districts);
     };
+
+    const fetchUser = async () => {
+      const userToFetch = await UserAPI.getById(user?.id);
+      setUserInfo(userToFetch.data);
+    };
     fetchDistricts();
+    fetchUser();
   }, [selectedProvince]);
 
   useEffect(() => {
@@ -104,7 +120,7 @@ const Payment = () => {
 
   const inputAddress = () => {
     return (
-      <div>
+      <div className="py-3">
         <h4>Chọn địa chỉ giao hàng</h4>
         <div className="d-flex gap-3">
           <div>
@@ -148,16 +164,66 @@ const Payment = () => {
             </div>
           )}
         </div>
+        <div className="py-3">
+          <span className="fw-bold fs-5">Phí vận chuyển:</span>{" "}
+          <span className="fw-bold text-danger fs-5">
+            {shippingFee.toLocaleString()} đ
+          </span>{" "}
+        </div>
       </div>
     );
   };
+
+  const handlePointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    if (value < 0) {
+      setPointToUse(0);
+      setPointError("");
+      return;
+    }
+
+    if (!userInfo?.membership?.points) {
+      setPointError("Không có điểm tích lũy");
+      return;
+    }
+
+    if (value > userInfo.membership.points) {
+      setPointError("Điểm tích lũy không được vượt quá số điểm hiện có");
+      return;
+    }
+
+    if (value > totalAmount) {
+      setPointError("Điểm tích lũy không được vượt quá tổng tiền");
+      return;
+    }
+
+    setPointToUse(value);
+    setPointError("");
+  };
+
+  // Tính tổng tiền
+  let finalAmount = 0;
+  switch (userInfo?.membership?.level) {
+    case "gold":
+      finalAmount = totalAmount - totalAmount * 0.1 - pointToUse;
+      break;
+    case "silver":
+      finalAmount = totalAmount - totalAmount * 0.08 - pointToUse;
+      break;
+    case "bronze":
+      finalAmount = totalAmount - totalAmount * 0.06 - pointToUse;
+      break;
+    default:
+      finalAmount = totalAmount - pointToUse;
+      break;
+  }
 
   return (
     <div className={styles.thanhtoan}>
       <div className={styles.frame22}>
         <div className={styles.sanpham}>Sản phẩm:</div>
-        {products.map((product) => (
-          <ProductItem key={product.id} product={product} />
+        {cartData?.items.map((product) => (
+          <ProductItem key={product._id} product={product} />
         ))}
 
         <div className={styles.frame25}>
@@ -166,13 +232,21 @@ const Payment = () => {
             <div>
               <div className="d-flex gap-2 px-2">
                 <button
-                  className="btn btn-outline-danger"
+                  className={`btn ${
+                    paymentMethod === "at_store"
+                      ? "btn-danger"
+                      : "btn-outline-danger"
+                  }`}
                   onClick={() => handlePaymentMethod("at_store")}
                 >
                   Nhận tại cửa hàng
                 </button>
                 <button
-                  className="btn btn-outline-danger"
+                  className={`btn ${
+                    paymentMethod === "delivery"
+                      ? "btn-danger"
+                      : "btn-outline-danger"
+                  }`}
                   onClick={() => handlePaymentMethod("delivery")}
                 >
                   Vận chuyển
@@ -181,17 +255,81 @@ const Payment = () => {
             </div>
           </div>
           {paymentMethod === "delivery" && inputAddress()}
-          <div className="py-3">
-            <span className="fw-bold fs-5">Phí vận chuyển:</span>{" "}
-            <span className="fw-bold text-danger fs-5">
-              {shippingFee.toLocaleString()} đ
-            </span>{" "}
+          <div className="d-flex gap-3">
+            <div className="flex-grow-1">
+              <label className="form-label">
+                Điểm tích lũy:
+                <input
+                  type="number"
+                  className={`form-control ${pointError ? "is-invalid" : ""}`}
+                  value={pointToUse}
+                  onChange={handlePointChange}
+                  min="0"
+                />
+                {pointError && (
+                  <div className="invalid-feedback">{pointError}</div>
+                )}
+              </label>
+            </div>
+            <div>
+              <label className="form-label">Điểm hiện tại:</label>
+              <h3 className="fw-bold text-success">
+                {userInfo?.membership?.points?.toLocaleString() || "0"}
+              </h3>
+            </div>
+            <div>
+              <label className="form-label">Level:</label>
+              <h3 className="fw-bold text-success">
+                {userInfo?.membership?.level}
+              </h3>
+            </div>
           </div>
-          <div className={styles.tongtien}>
-            <span className="fw-bold">Tổng tiền:</span>{" "}
-            <span className="text-danger">
-              {totalAmount.toLocaleString()} đ
-            </span>{" "}
+
+          <div className="py-3">
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="fw-bold">Tổng tiền sản phẩm:</span>
+              <span>
+                {cartData?.items
+                  .reduce((sum, p) => sum + p.price * p.quantity, 0)
+                  .toLocaleString()}{" "}
+                đ
+              </span>
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="fw-bold">Phí vận chuyển:</span>
+              <span>{shippingFee.toLocaleString()} đ</span>
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="fw-bold">Giảm giá theo level:</span>
+              <span className="text-success">
+                {userInfo?.membership?.level === "gold"
+                  ? " - " + (totalAmount * 0.1).toLocaleString() + " đ"
+                  : userInfo?.membership?.level === "silver"
+                  ? " - " + (totalAmount * 0.08).toLocaleString() + " đ"
+                  : userInfo?.membership?.level === "bronze"
+                  ? " - " + (totalAmount * 0.06).toLocaleString() + " đ"
+                  : "0%"}
+              </span>
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="fw-bold">Điểm tích lũy sử dụng:</span>
+              <span className="text-success">
+                -{pointToUse.toLocaleString()} đ
+              </span>
+            </div>
+            <hr />
+            <div className="d-flex justify-content-between align-items-center">
+              <span className="fw-bold fs-5">Tổng tiền phải thanh toán:</span>
+              <span className="text-danger fs-5">
+                {finalAmount.toLocaleString()} đ
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <button className="btn btn-danger d-flex justify-content-end">
+              Hoàn tất thanh toán
+            </button>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ class UserAPI {
     }
   }
 
-  async getById(id: string) {
+  async getById(id: any) {
     try {
       const response = await axios.post(`${API_USER_URL}/getById`, { id });
       return response;
