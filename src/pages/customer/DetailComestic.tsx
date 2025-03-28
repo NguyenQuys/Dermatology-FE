@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import comesticApi from "../../api/comestic.api";
-import customerApi from "../../api/user.api";
+import CartApi from "../../api/cart.api";
 import { ShoppingCart } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
+import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
 
 interface Review {
   _id: string;
@@ -28,6 +30,8 @@ interface Comestic {
 
 const DetailComestic: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { token } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [comestic, setComestic] = useState<Comestic | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,6 +63,22 @@ const DetailComestic: React.FC = () => {
       setQuantity((prev) => prev + 1);
     } else {
       setQuantity((prev) => Math.max(1, prev - 1));
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (!comestic) return;
+
+    const response = await CartApi.add(id as string, quantity);
+    if (response.status === 201) {
+      showSuccessToast(response.data.message);
+    } else {
+      showErrorToast(response.data.message);
     }
   };
 
@@ -163,9 +183,8 @@ const DetailComestic: React.FC = () => {
           <div className="d-grid gap-2 d-flex justify-content-start">
             <button className="btn btn-success">MUA NGAY</button>
 
-            <button className="btn btn-primary">
-              <ShoppingCart size={32} color="white" />
-              &nbsp; THÊM VÀO GIỎ HÀNG
+            <button className="btn btn-primary" onClick={handleAddToCart}>
+              Thêm vào giỏ hàng
             </button>
           </div>
         </div>

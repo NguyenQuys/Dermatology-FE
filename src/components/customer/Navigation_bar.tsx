@@ -64,7 +64,7 @@ const Navigation_bar = () => {
             Chuẩn đoán
           </Link>
           <Link
-            to="/shopping"
+            to="/cart"
             className="mua-h-ng"
             style={{ textDecoration: "none" }}
           >

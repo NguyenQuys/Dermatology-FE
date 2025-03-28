@@ -11,7 +11,7 @@ const AppointmentForm = () => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [date, setDate] = useState<Date>(new Date());
 
-  const [isSubmitted, setIsSubmitted] = useState(false); // ✅ Thêm state kiểm tra gửi form
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -123,10 +123,6 @@ const AppointmentForm = () => {
             </Link>{" "}
             để đặt lịch hẹn
           </h1>
-          <img
-            src="/src/assets/customer/products/images/doctor_appointment.jpg"
-            alt="doctor_appointment"
-          />
         </div>
       )}
     </div>

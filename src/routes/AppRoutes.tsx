@@ -12,6 +12,7 @@ import PrivateRoute from "../components/mutual/PrivateRoute";
 import UnauthorizationForm from "../components/mutual/UnauthorizationForm";
 import Information from "../pages/customer/Information";
 import DetailComestic from "../pages/customer/DetailComestic";
+import Cart from "../pages/customer/Cart";
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/appointment" element={<AppointmentForm />} />
         <Route path="/unauthorized" element={<UnauthorizationForm />} />
         <Route path="/information" element={<Information />} />
+        <Route path="/cart" element={<Cart />} />
       </Route>
 
       {/* Routes cần quyền truy cập */}

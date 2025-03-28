@@ -75,7 +75,7 @@ const Comestic: React.FC = () => {
                     className="list-group-item d-flex justify-content-between w-100"
                   >
                     <Link
-                      to={`/products/${product._id}`}
+                      to={`/comestic/${product._id}`}
                       className="text-decoration-none text-dark d-flex justify-content-between align-items-center"
                       style={{ width: "100%" }}
                     >

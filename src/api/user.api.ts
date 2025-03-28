@@ -27,18 +27,6 @@ class UserAPI {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
     }
   }
-
-  async getArrayNameByCustomerIds(customerIds: string[]) {
-    try {
-      const response = await axios.post(
-        `${API_USER_URL}/getArrayNameByCustomerIds`,
-        { customerIds }
-      );
-      return response;
-    } catch (error: any) {
-      return error.response?.data?.message || "Đã xảy ra lỗi!";
-    }
-  }
 }
 
 export default new UserAPI();
