@@ -13,6 +13,7 @@ import UnauthorizationForm from "../components/mutual/UnauthorizationForm";
 import Information from "../pages/customer/Information";
 import DetailComestic from "../pages/customer/DetailComestic";
 import Cart from "../pages/customer/Cart";
+import Payment from "../pages/customer/Payment";
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route path="/unauthorized" element={<UnauthorizationForm />} />
         <Route path="/information" element={<Information />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/payment" element={<Payment />} />
       </Route>
 
       {/* Routes cần quyền truy cập */}

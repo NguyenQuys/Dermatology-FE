@@ -24,24 +24,23 @@ interface Cart {
 const Cart: React.FC = () => {
   const { token } = useAuth();
   const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchCartItems = async () => {
     try {
-      setLoading(true);
       const response = await CartApi.get();
       setCart(response);
     } catch (error) {
       console.error("Error fetching cart items:", error);
       setError("Không thể tải thông tin giỏ hàng. Vui lòng thử lại sau.");
     } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCartItems();
+    if (token) {
+      fetchCartItems();
+    }
   }, []);
 
   const handleQuantityChange = (
@@ -86,18 +85,6 @@ const Cart: React.FC = () => {
     if (!cart) return 0;
     return cart.items.reduce((total, item) => total + item.quantity, 0);
   };
-
-  if (loading) {
-    return (
-      <div className="container py-4">
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
