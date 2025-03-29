@@ -8,6 +8,7 @@ import Calendar from "../mutual/Calendar";
 import Examination from "../doctor/Examination";
 import Queue from "../mutual/AppointmentQueue";
 import AppointmentPharmacist from "../mutual/AppointmentPharmacist";
+import Statistics from "./Statistics";
 
 export let tabIdFromSidebar = "";
 let sidebarUpdateCallback: ((customerId?: string) => void) | null = null;
@@ -61,6 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
       } else if (tabId === "nav-examination-tab") {
         getColumns();
       } else if (tabId === "nav-appointment-tab") {
+        getColumns();
+      } else if (tabId === "nav-statistics-tab") {
         getColumns();
       } else {
         const entities = await services.selectTab(tabId);
@@ -159,6 +162,8 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
     contentToRender = <Queue />;
   } else if (activeTab === "nav-appointment-tab") {
     contentToRender = <AppointmentPharmacist />;
+  } else if (activeTab === "nav-statistics-tab") {
+    contentToRender = <Statistics />;
   }
 
   // return roles components
@@ -254,6 +259,20 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
                 <span className="menu-title">Mỹ phẩm</span>
               </a>
             </li>
+            <li className="nav-item nav-category">Quản lý hệ thống</li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-statistics-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-statistics-tab")}
+              >
+                <span className="menu-title">Thống kê</span>
+              </a>
+            </li>
           </ul>
         </nav>
         <div className="container p-3">
@@ -267,7 +286,9 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
             )}*/}
           </div>
 
-          {activeTab !== "" && (
+          {activeTab === "nav-statistics-tab" ? (
+            contentToRender
+          ) : (
             <DataTable
               columns={getColumns() as any}
               data={data || []}

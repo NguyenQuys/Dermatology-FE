@@ -104,8 +104,6 @@ const Information = () => {
     setSelectedRecord(null);
   };
 
-  console.log(itemRecord);
-
   return (
     <div className="container m-5">
       {!isOpenMedicalRecord ? (
