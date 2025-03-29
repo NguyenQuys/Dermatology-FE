@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { replace, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import UserAPI from "../../api/user.api";
+import OrderApi from "../../api/oder.api";
+import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
+
 interface Province {
   code: string;
   name: string;
@@ -27,6 +30,18 @@ interface CartData {
   _id: string;
   customer_id: string;
   items: CartItem[];
+  type: string;
+}
+
+interface FormData {
+  customer_id: string;
+  items: any[];
+  total_amount: Number;
+  final_amount: Number;
+  address: string;
+  order_id: string;
+  points_used: Number;
+  payment_method: string;
 }
 
 const ProductItem = ({ product }: { product: CartItem }) => {
@@ -69,8 +84,9 @@ const Payment = () => {
   const cartData = location.state?.cartData as CartData;
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
-  const [selectedProvince, setSelectedProvince] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedProvinceCode, setSelectedProvinceCode] = useState<number>();
+  const [selectedDistrictCode, setSelectedDistrictCode] = useState<number>();
+  const [specificAddress, setSpecificAddress] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [userInfo, setUserInfo] = useState<any>(null);
   const [pointToUse, setPointToUse] = useState<number>(0);
@@ -78,11 +94,15 @@ const Payment = () => {
   const [discountLevel, setDiscountLevel] = useState<number>(0);
   let [shippingFee, setShippingFee] = useState<number>(0);
   let [totalAmount, setTotalAmount] = useState<number>(0);
+  const [address, setAddress] = useState<string>("");
+  const [formData, setFormData] = useState<FormData>();
 
   const handlePaymentMethod = (method: string) => {
     setPaymentMethod(method);
 
+    let newShippingFee = 0;
     if (method === "delivery") {
+      newShippingFee = 30000;
       setShippingFee(30000);
 
       const fetchProvinces = async () => {
@@ -92,18 +112,24 @@ const Payment = () => {
       fetchProvinces();
       inputAddress();
     } else {
+      setAddress("");
       setShippingFee(0);
     }
+
     setTotalAmount(
-      cartData?.items.reduce((sum, p) => sum + p.price * p.quantity, 0) +
-        shippingFee || 0
+      (cartData?.items.reduce((sum, p) => sum + p.price * p.quantity, 0) || 0) +
+        newShippingFee
     );
   };
 
   useEffect(() => {
     const fetchDistricts = async () => {
-      const districts = await CityAPI.getDistricts(selectedProvince);
-      setDistricts(districts);
+      if (selectedProvinceCode) {
+        const districts = await CityAPI.getDistricts(
+          selectedProvinceCode.toString()
+        );
+        setDistricts(districts);
+      }
     };
 
     const fetchUser = async () => {
@@ -112,11 +138,39 @@ const Payment = () => {
     };
     fetchDistricts();
     fetchUser();
-  }, [selectedProvince]);
+  }, [selectedProvinceCode]);
 
   useEffect(() => {
     inputAddress();
-  }, [selectedDistrict]);
+  }, [selectedDistrictCode]);
+
+  const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDistrictCode(Number(e.target.value));
+  };
+
+  const handleSpecificAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSpecificAddress(e.target.value);
+  };
+
+  useEffect(() => {
+    if (selectedProvinceCode && selectedDistrictCode && specificAddress) {
+      const provinceName = provinces.find(
+        (p) => Number(p.code) === selectedProvinceCode
+      )?.name;
+      const districtName = districts.find(
+        (d) => Number(d.code) === selectedDistrictCode
+      )?.name;
+      setAddress(`${specificAddress}, ${districtName}, ${provinceName}`);
+    }
+  }, [
+    selectedProvinceCode,
+    selectedDistrictCode,
+    specificAddress,
+    provinces,
+    districts,
+  ]);
 
   const inputAddress = () => {
     return (
@@ -128,7 +182,10 @@ const Payment = () => {
               Tỉnh/Thành phố:
               <select
                 className="form-control"
-                onChange={(e) => setSelectedProvince(e.target.value)}
+                onChange={(e) =>
+                  setSelectedProvinceCode(Number(e.target.value))
+                }
+                value={selectedProvinceCode}
               >
                 <option value="">Chọn tỉnh/thành phố</option>
                 {provinces.map((province) => (
@@ -140,12 +197,16 @@ const Payment = () => {
             </label>
           </div>
 
-          {selectedProvince && (
+          {selectedProvinceCode && (
             <div className="d-flex gap-3">
               <div>
                 <label className="form-label">
                   Quận/Huyện:
-                  <select className="form-control">
+                  <select
+                    className="form-control"
+                    onChange={handleDistrictChange}
+                    value={selectedDistrictCode}
+                  >
                     <option value="">Chọn quận/huyện</option>
                     {districts.map((district) => (
                       <option key={district.code} value={district.code}>
@@ -157,8 +218,14 @@ const Payment = () => {
               </div>
               <div>
                 <label className="form-label">
-                  Địa chỉ:
-                  <input type="text" className="form-control" />
+                  Địa chỉ cụ thể:
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={specificAddress}
+                    onChange={handleSpecificAddressChange}
+                    placeholder="Nhập địa chỉ chi tiết"
+                  />
                 </label>
               </div>
             </div>
@@ -199,6 +266,26 @@ const Payment = () => {
 
     setPointToUse(value);
     setPointError("");
+  };
+
+  const handleSubmit = async () => {
+    const orderFormData = {
+      customer_id: user?.id, // ok
+      items: cartData?.items, // ok
+      total_amount: totalAmount, // ok
+      final_amount: finalAmount,
+      address: address ? address : "",
+      points_used: pointToUse,
+      payment_method: paymentMethod,
+    };
+
+    const orderToAdd = await OrderApi.add(orderFormData);
+
+    if (orderToAdd.status === 201) {
+      showSuccessToast(orderToAdd.data.message);
+    } else {
+      showErrorToast(orderToAdd.data.message);
+    }
   };
 
   // Tính tổng tiền
@@ -327,7 +414,10 @@ const Payment = () => {
           </div>
 
           <div>
-            <button className="btn btn-danger d-flex justify-content-end">
+            <button
+              className="btn btn-danger d-flex justify-content-end"
+              onClick={handleSubmit}
+            >
               Hoàn tất thanh toán
             </button>
           </div>

@@ -46,7 +46,6 @@ let Modal: React.FC<ModalProps> = ({
   const [gender, setGender] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // Xử lý thay đổi dữ liệu nhập
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, type } = e.target;
     setFormData((prev) => ({
@@ -63,7 +62,6 @@ let Modal: React.FC<ModalProps> = ({
     setGender(e.target.value);
   };
 
-  // Đổi từ typeModal sang tabId
   if (typeModal === "comestic") {
     assignedTabId = "nav-comestic-tab";
   } else if (typeModal === "treatment") {

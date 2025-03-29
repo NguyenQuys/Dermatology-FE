@@ -9,6 +9,7 @@ interface CartItem {
   _id: string;
   comestic_id: string;
   quantity: number;
+  type: string;
   comestic_name: string;
   comestic_image: string;
   price: number;
@@ -29,6 +30,9 @@ const Cart: React.FC = () => {
   const fetchCartItems = async () => {
     try {
       const response = await CartApi.get();
+      response.items.forEach((item: any) => {
+        item.type = "comestic";
+      });
       setCart(response);
     } catch (error) {
       console.error("Error fetching cart items:", error);
