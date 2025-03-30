@@ -26,6 +26,7 @@ class Medical_recordAPI {
       throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
     }
   }
+
   async add(data: any, appointmentId?: string) {
     try {
       if (appointmentId) {
@@ -36,6 +37,19 @@ class Medical_recordAPI {
       return response;
     } catch (error: any) {
       throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
+    }
+  }
+
+  async exportPDF(medical_record_id: string) {
+    try {
+      const response = await axios.post(
+        `${API_MEDICAL_RECORD_DATA}/export_record`,
+        { medical_record_id },
+        { responseType: "blob" } // Bắt buộc để xử lý file PDF
+      );
+      return response.data;
+    } catch (error: any) {
+      return error.response;
     }
   }
 }

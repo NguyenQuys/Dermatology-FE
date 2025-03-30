@@ -104,6 +104,26 @@ const Information = () => {
     setSelectedRecord(null);
   };
 
+  const handleExportPDF = async (id: string) => {
+    try {
+      const pdfBlob = await medical_recordApi.exportPDF(id);
+
+      // Tạo URL từ blob
+      const url = window.URL.createObjectURL(new Blob([pdfBlob]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `record_${id}.pdf`);
+      document.body.appendChild(link);
+
+      link.click();
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Lỗi khi tải file PDF:", error);
+    }
+  };
+
   return (
     <div className="container m-5">
       {!isOpenMedicalRecord ? (
@@ -168,6 +188,12 @@ const Information = () => {
                         onClick={() => handleOpenModalDetail(record)}
                       >
                         Chi tiết
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleExportPDF(record._id)}
+                      >
+                        Xuất bệnh án
                       </button>
                     </td>
                   </tr>

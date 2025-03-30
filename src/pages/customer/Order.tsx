@@ -51,7 +51,7 @@ const Order = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Lịch sử đơn hàng</h1>
       <div className="overflow-x-auto">
-        <table class="table table-striped">
+        <table className="table table-striped">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
