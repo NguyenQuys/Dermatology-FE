@@ -7,7 +7,7 @@ const Navigation_bar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  const { user, token, login, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -71,7 +71,7 @@ const Navigation_bar = () => {
             Giỏ hàng
           </Link>
         </div>
-        {!token ? (
+        {!user ? (
           <div className="sign-in">
             <Link
               to="/login"
@@ -108,6 +108,15 @@ const Navigation_bar = () => {
                     onClick={() => setIsOpen(false)}
                   >
                     Cá nhân
+                  </Link>
+                </li>
+                <li className="p-2">
+                  <Link
+                    to="/order"
+                    className="fw-bold text-dark text-decoration-none"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Đơn hàng
                   </Link>
                 </li>
                 <li className="p-2">

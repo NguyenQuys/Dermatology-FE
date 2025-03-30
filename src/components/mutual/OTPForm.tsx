@@ -12,6 +12,8 @@ const OTPForm = () => {
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
 
+  console.log(otpCode);
+
   useEffect(() => {
     if (countdown > 0) {
       const timer = setInterval(() => {

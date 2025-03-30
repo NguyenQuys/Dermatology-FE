@@ -108,7 +108,7 @@ export default function Statistics() {
                     key={transaction._id}
                     className="border-b hover:bg-gray-50"
                   >
-                    <td className="px-4 py-2">{transaction._id}</td>
+                    <td className="px-4 py-2">#{transaction._id}</td>
                     <td className="px-4 py-2">
                       {transaction.payment_method === "delivery"
                         ? "Vận chuyển"
@@ -128,6 +128,10 @@ export default function Statistics() {
                         ? "Hoàn tất"
                         : transaction.status === "cancelled"
                         ? "Đã hủy"
+                        : transaction.status === "considering_refund"
+                        ? "Đang xem xét hoàn tiền"
+                        : transaction.status === "refund_successfully"
+                        ? "Hoàn tiền thành công"
                         : "Đang xử lý"}
                     </td>
                   </tr>

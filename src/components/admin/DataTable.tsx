@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import DetailButton from "./DetailButton";
+import { useAuth } from "../../hooks/useAuth";
+import { tabIdFromSidebar } from "./Sidebar";
 
 interface Column {
   header: string;
@@ -45,7 +47,11 @@ const DataTable: React.FC<DataTableProps> = ({
                 {column.header}
               </th>
             ))}
-            {actions && <th className="bg-primary text-white">Hành động</th>}
+            {tabIdFromSidebar === "nav-medicine-tab" ||
+            tabIdFromSidebar === "nav-treatment-tab" ||
+            tabIdFromSidebar === "nav-comestic-tab"
+              ? ""
+              : actions && <th className="bg-primary text-white">Hành động</th>}
           </tr>
         </thead>
         <tbody>
@@ -68,7 +74,11 @@ const DataTable: React.FC<DataTableProps> = ({
                       : item[column.accessor]}
                   </td>
                 ))}
-                {actions && (
+                {tabIdFromSidebar === "nav-medicine-tab" ||
+                tabIdFromSidebar === "nav-treatment-tab" ||
+                tabIdFromSidebar === "nav-comestic-tab" ? (
+                  ""
+                ) : (
                   <td>
                     <button
                       className="btn btn-info"
