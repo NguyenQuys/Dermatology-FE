@@ -128,12 +128,9 @@ const Comestic: React.FC = () => {
                 <div className={styles.frame7}>
                   <div className={styles.kemDuongAm}>
                     <span>
-                      <span className={styles.kemDuongAmSpan}>
+                      <span className="d-flex justify-content-center fw-bold fs-4">
                         {comestic.name}
                         <br />
-                      </span>
-                      <span className={styles.kemDuongAmSpan2}>
-                        Cấp ẩm cho làn da căng bóng, mịn màng
                       </span>
                     </span>
                   </div>

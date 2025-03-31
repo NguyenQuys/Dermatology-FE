@@ -82,6 +82,14 @@ const AppointmentForm = () => {
           ) : (
             <form id="appointment-form" onSubmit={handleSubmit}>
               <div className="mb-3">
+                <label className="form-label">Ngày và giờ khám:</label>
+                <input
+                  type="datetime-local"
+                  className="form-control"
+                  onChange={handleSelectDate}
+                />
+              </div>
+              <div className="mb-3">
                 <label className="form-label">Chọn bác sĩ khám:</label>
                 <select
                   className="form-select"
@@ -98,14 +106,7 @@ const AppointmentForm = () => {
                   ))}
                 </select>
               </div>
-              <div className="mb-3">
-                <label className="form-label">Ngày và giờ khám:</label>
-                <input
-                  type="datetime-local"
-                  className="form-control"
-                  onChange={handleSelectDate}
-                />
-              </div>
+
               <div className="text-center">
                 <button type="submit" className="btn btn-warning fw-bold px-5">
                   ĐẶT LỊCH

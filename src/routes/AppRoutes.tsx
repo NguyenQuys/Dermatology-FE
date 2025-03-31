@@ -15,6 +15,7 @@ import DetailComestic from "../pages/customer/DetailComestic";
 import Cart from "../pages/customer/Cart";
 import Payment from "../pages/customer/Payment";
 import Order from "../pages/customer/Order";
+import Diagnosis from "../pages/customer/Diagnosis";
 
 const AppRoutes = () => {
   return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/diagnosis" element={<Diagnosis />} />
       </Route>
 
       {/* Routes cần quyền truy cập */}

@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import * as showNotification from "../../utils/toast.util";
 import { useOtpAPI } from "../../api/otp.api";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import { jwtDecode } from "jwt-decode";
 
 const OTPForm = () => {
   const { verifyOtp } = useOtpAPI();

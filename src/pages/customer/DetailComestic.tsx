@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, data } from "react-router-dom";
 import comesticApi from "../../api/comestic.api";
 import CartApi from "../../api/cart.api";
 import { ShoppingCart } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
+import ReviewApi from "../../api/review.api";
 
 interface Review {
   _id: string;
@@ -28,6 +29,11 @@ interface Comestic {
   image: string;
 }
 
+interface ReviewToAdd {
+  comment: string;
+  rating: number;
+}
+
 const DetailComestic: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -36,23 +42,27 @@ const DetailComestic: React.FC = () => {
   const [comestic, setComestic] = useState<Comestic | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [review, setReview] = useState<ReviewToAdd>({
+    comment: "",
+    rating: 0,
+  });
+
+  const fetchComestic = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await comesticApi.getComesticById(id as string);
+
+      setComestic(response.data);
+    } catch (error) {
+      console.error("Error fetching comestic:", error);
+      setError("Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchComestic = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await comesticApi.getComesticById(id as string);
-
-        setComestic(response.data);
-      } catch (error) {
-        console.error("Error fetching comestic:", error);
-        setError("Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (id) {
       fetchComestic();
     }
@@ -79,6 +89,25 @@ const DetailComestic: React.FC = () => {
       showSuccessToast(response.data.message);
     } else {
       showErrorToast(response.data.message);
+    }
+  };
+
+  const handleSubmitReview = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const response = await ReviewApi.add({
+        comestic_id: id,
+        comment: review.comment,
+        rating: review.rating,
+      });
+      showSuccessToast(response.data.message);
+      setReview({
+        comment: "",
+        rating: 0,
+      });
+      fetchComestic();
+    } catch (error) {
+      showErrorToast("Không thể gửi đánh giá. Vui lòng thử lại.");
     }
   };
 
@@ -194,6 +223,35 @@ const DetailComestic: React.FC = () => {
       <div className="row mt-5">
         <div className="col-12">
           <h3 className="mb-4">ĐÁNH GIÁ SẢN PHẨM</h3>
+          <form onSubmit={handleSubmitReview}>
+            <div className="rating">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  className={`btn btn-outline-warning me-1 ${
+                    review.rating >= star ? "active" : ""
+                  }`}
+                  onClick={() => setReview({ ...review, rating: star })}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Đánh giá</label>
+              <textarea
+                className="form-control"
+                placeholder="Nhập đánh giá của bạn"
+                rows={3}
+                value={review.comment}
+                onChange={(e) =>
+                  setReview({ ...review, comment: e.target.value })
+                }
+              ></textarea>
+            </div>
+            <button className="btn btn-primary">Gửi đánh giá</button>
+          </form>
           {comestic.reviews.map((review, index) => (
             <div key={review._id} className="card mb-3">
               <div className="card-body">
