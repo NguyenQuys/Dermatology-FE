@@ -36,6 +36,8 @@ const SignInForm = () => {
     const response = await AuthAPI.login(username, password);
     if (response.status === 200) {
       showNotification.showSuccessToast(response.data.message);
+      console.log(response.data.message);
+
       navigate("/verifyOtp");
     } else {
       showNotification.showErrorToast(response.data.message);

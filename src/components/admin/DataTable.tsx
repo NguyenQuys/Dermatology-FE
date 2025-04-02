@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DetailButton from "./DetailButton";
-import { useAuth } from "../../hooks/useAuth";
 import { tabIdFromSidebar } from "./Sidebar";
+import comesticApi from "../../api/comestic.api";
 
 interface Column {
   header: string;
@@ -14,6 +14,13 @@ interface DataTableProps {
   data: any[];
   loading?: boolean;
   actions?: (item: any) => React.ReactNode; // cho nut detail
+}
+
+interface ComesticProps {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -48,8 +55,7 @@ const DataTable: React.FC<DataTableProps> = ({
               </th>
             ))}
             {tabIdFromSidebar === "nav-medicine-tab" ||
-            tabIdFromSidebar === "nav-treatment-tab" ||
-            tabIdFromSidebar === "nav-comestic-tab"
+            tabIdFromSidebar === "nav-treatment-tab"
               ? ""
               : actions && <th className="bg-primary text-white">Hành động</th>}
           </tr>
@@ -75,8 +81,7 @@ const DataTable: React.FC<DataTableProps> = ({
                   </td>
                 ))}
                 {tabIdFromSidebar === "nav-medicine-tab" ||
-                tabIdFromSidebar === "nav-treatment-tab" ||
-                tabIdFromSidebar === "nav-comestic-tab" ? (
+                tabIdFromSidebar === "nav-treatment-tab" ? (
                   ""
                 ) : (
                   <td>

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { tabIdFromSidebar } from "./Sidebar";
 import UserAPI from "../../api/user.api";
+import ComesticAPI from "../../api/comestic.api";
+import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
+import { setTabId } from "./Sidebar";
 
 interface Row {
   header: string;
@@ -22,6 +25,27 @@ const DetailButton: React.FC<DetailButtonProps> = ({
   idItem,
 }) => {
   const [data, setData] = useState<any>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setData((prev: any) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    if (tabIdFromSidebar === "nav-comestic-tab") {
+      const response = await ComesticAPI.updateComestic(idItem, data);
+      if (response.status === 200) {
+        showSuccessToast(response.data.message);
+        setTabId(tabIdFromSidebar);
+      } else {
+        showErrorToast(response.data.message);
+      }
+    }
+    onClose();
+  };
 
   const getRows = (): Row[] => {
     const commonRows = [
@@ -73,63 +97,43 @@ const DetailButton: React.FC<DetailButtonProps> = ({
         ];
 
       case "nav-comestic-tab":
-        return data?.reviews?.length > 0
-          ? [
-              {
-                header: "Đánh giá",
-                accessor: "reviews",
-                render: () =>
-                  data.reviews.map((review: any, index: number) => (
-                    <div key={index} className="border p-2 mb-2">
-                      <p>
-                        <strong>Id khách hàng:</strong> {review.customer_id}
-                      </p>
-                      <p>
-                        <strong>Bình luận:</strong> {review.comment}
-                      </p>
-                      <p>
-                        <strong>Điểm số:</strong> {review.rating}
-                      </p>
-                      <p>
-                        <strong>Thời gian:</strong>{" "}
-                        {new Date(review.createdAt).toLocaleString("vi-VN")}
-                      </p>
-                    </div>
-                  )),
-              },
-            ]
-          : [
-              {
-                header: "Đánh giá",
-                accessor: "reviews",
-                render: () => "Không có đánh giá nào",
-              },
-            ];
-
+        return [
+          { header: "Tên sản phẩm", accessor: "name" },
+          {
+            header: "Giá",
+            accessor: "price",
+          },
+          { header: "Danh mục", accessor: "category" },
+          {
+            header: "Số lượng",
+            accessor: "quantity",
+          },
+        ];
       default:
         return [];
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiMap: Record<string, any> = {
-          "nav-pharmacist-tab": UserAPI.getById,
-          "nav-doctor-tab": UserAPI.getById,
-          "nav-customer-tab": UserAPI.getById,
-        };
+  const fetchData = async () => {
+    try {
+      const apiMap: Record<string, any> = {
+        "nav-pharmacist-tab": UserAPI.getById,
+        "nav-doctor-tab": UserAPI.getById,
+        "nav-customer-tab": UserAPI.getById,
+        "nav-comestic-tab": ComesticAPI.getComesticById,
+      };
 
-        const apiFunction = apiMap[tabIdFromSidebar];
-        if (apiFunction) {
-          const response = await apiFunction(idItem);
-          setData(response.data);
-        }
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
+      const apiFunction = apiMap[tabIdFromSidebar];
+      if (apiFunction) {
+        const response = await apiFunction(idItem);
+        setData(response.data);
       }
-    };
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [idItem]);
 
@@ -156,39 +160,41 @@ const DetailButton: React.FC<DetailButtonProps> = ({
             <form>
               {rows.map((row, index) => (
                 <div className="mb-3" key={index}>
-                  {tabIdFromSidebar === "nav-comestic-tab" ? (
-                    row.render ? (
-                      row.render(data[row.accessor])
-                    ) : (
-                      <p>
-                        {row.header}:{" "}
-                        {data?.[row.accessor] || "Không có dữ liệu"}
-                      </p>
-                    )
-                  ) : (
-                    <>
-                      <label htmlFor={row.accessor} className="form-label">
-                        {row.header}
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id={row.accessor}
-                        value={
-                          row.accessor.includes("membership.")
-                            ? data?.membership?.[row.accessor.split(".")[1]] ||
-                              ""
-                            : row.render
-                            ? row.render(data?.[row.accessor])
-                            : data?.[row.accessor] || ""
-                        }
-                        readOnly
-                      />
-                    </>
-                  )}
+                  <label htmlFor={row.accessor} className="form-label">
+                    {row.header}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={row.accessor}
+                    value={
+                      row.accessor.includes("membership.")
+                        ? data?.membership?.[row.accessor.split(".")[1]] || ""
+                        : row.render
+                        ? row.render(data?.[row.accessor])
+                        : data?.[row.accessor] || ""
+                    }
+                    onChange={handleInputChange}
+                  />
                 </div>
               ))}
             </form>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary me-2"
+              onClick={onClose}
+            >
+              Đóng
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleSave}
+            >
+              Lưu
+            </button>
           </div>
         </div>
       </div>

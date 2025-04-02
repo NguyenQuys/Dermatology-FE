@@ -90,8 +90,9 @@ let Modal: React.FC<ModalProps> = ({
 
       if (typeModal === "comestic") {
         dataToSend.category = category;
+
         response = await ComesticAPI.addComestic(
-          dataToSend as unknown as Comestic
+          formData as unknown as Comestic
         );
       } else if (typeModal === "treatment") {
         response = await TreatmentAPI.add(dataToSend as unknown as Treatment);

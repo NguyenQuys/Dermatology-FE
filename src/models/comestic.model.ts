@@ -3,4 +3,5 @@ export interface Comestic {
   price: number;
   category: string;
   quantity: Date;
+  image?: string;
 }

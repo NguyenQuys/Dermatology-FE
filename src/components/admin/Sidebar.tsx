@@ -277,13 +277,13 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
         </nav>
         <div className="container p-3">
           <div className="col-lg-12">
-            {/*{activeTab !== "" ? (
+            {activeTab !== "" ? (
               activeTab !== "nav-customer-tab" ? (
                 <AddButton type={activeTab} handleTabClick={handleTabClick} />
               ) : null
             ) : (
               <h1>Vui lòng chọn tab để hiển thị</h1>
-            )}*/}
+            )}
           </div>
 
           {activeTab === "nav-statistics-tab" ? (

@@ -98,7 +98,7 @@ const Navigation_bar = () => {
                   minWidth: "150px",
                   border: "1px solid #ddd",
                   zIndex: 1,
-                  marginTop: "150px",
+                  marginTop: "200px",
                 }}
               >
                 <li className="p-2">

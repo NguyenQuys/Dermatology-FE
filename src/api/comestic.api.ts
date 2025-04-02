@@ -9,9 +9,22 @@ class ComesticAPI {
     return response;
   }
 
-  async addComestic(comestic: Comestic): Promise<string> {
+  async addComestic(formData: FormData | Comestic): Promise<string> {
     try {
-      const response = await axios.post(`${API_COMESTIC_URL}/add`, comestic);
+      const config = {
+        headers: {
+          "Content-Type":
+            formData instanceof FormData
+              ? "multipart/form-data"
+              : "application/json",
+        },
+      };
+
+      const response = await axios.post(
+        `${API_COMESTIC_URL}/add`,
+        formData,
+        config
+      );
       return response.data.message;
     } catch (error: any) {
       throw new Error(error.response.data.message || "Đã xảy ra lỗi!");
@@ -32,6 +45,18 @@ class ComesticAPI {
       const response = await axios.post(`${API_COMESTIC_URL}/searchByName`, {
         name,
       });
+      return response;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
+
+  async updateComestic(id: string, comestic: Comestic) {
+    try {
+      const response = await axios.put(
+        `${API_COMESTIC_URL}/update/${id}`,
+        comestic
+      );
       return response;
     } catch (error: any) {
       return error.response?.data?.message || "Đã xảy ra lỗi!";

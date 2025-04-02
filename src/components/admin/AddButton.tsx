@@ -44,6 +44,8 @@ const AddButton: React.FC<AddButtonProps> = ({ type, handleTabClick }) => {
           { header: "Tên", accessor: "name", type: "text" },
           { header: "Giá", accessor: "price", type: "number" },
           { header: "Số lượng hàng", accessor: "quantity", type: "number" },
+          { header: "Hình ảnh", accessor: "image", type: "file" },
+          { header: "Phân loại", accessor: "category", type: "select" },
         ];
       case "treatment":
         return [
