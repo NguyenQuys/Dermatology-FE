@@ -27,6 +27,17 @@ class UserAPI {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
     }
   }
+
+  async getDoctorsByDate(date: string) {
+    try {
+      const response = await axios.post(`${API_USER_URL}/getDoctorsByDate/`, {
+        date,
+      });
+      return response;
+    } catch (error: any) {
+      return error.response || "Đã xảy ra lỗi!";
+    }
+  }
 }
 
 export default new UserAPI();

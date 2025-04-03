@@ -34,7 +34,7 @@ class AppointmentAPI {
     }
   }
 
-  async createAppointment(appointment: Appointment) {
+  async createAppointment(appointment?: any) {
     try {
       const response = await axios.post(
         `${API_APPOINTMENT_URL}/addByCustomer`,

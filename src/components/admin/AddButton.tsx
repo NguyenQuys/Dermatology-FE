@@ -83,7 +83,7 @@ const AddButton: React.FC<AddButtonProps> = ({ type, handleTabClick }) => {
         onClose={handleCloseModal}
         title="Thêm mới"
         typeModal={typeSideBar(type)}
-        handleTabClick={handleTabClick} // Truyền hàm này vào Modal
+        handleTabClick={handleTabClick}
       />
     </>
   );

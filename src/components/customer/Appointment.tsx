@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import UserAPI from "../../api/user.api";
 import AppointmentAPI from "../../api/appointment.api";
 import { showSuccessToast, showErrorToast } from "../../utils/toast.util";
+import userApi from "../../api/user.api";
 
 const AppointmentForm = () => {
   const { token } = useAuth();
   const [doctors, setDoctors] = useState<{ id: string; name: string }[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -35,8 +36,27 @@ const AppointmentForm = () => {
     fetchDoctors();
   }, []);
 
-  const handleSelectDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(new Date(e.target.value));
+  const handleSelectDate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateToSelect = new Date(e.target.value);
+    setDate(dateToSelect);
+
+    const year = dateToSelect.getFullYear();
+    const month = String(dateToSelect.getMonth() + 1).padStart(2, "0");
+    const day = String(dateToSelect.getDate()).padStart(2, "0");
+    const dateString = `${year}-${month}-${day}`;
+
+    const responseDoctors = await userApi.getDoctorsByDate(dateString);
+    if (responseDoctors.status === 200) {
+      const doctorData = responseDoctors.data.map((item: any) => ({
+        id: item.doctor._id,
+        name: item.doctor.name,
+      }));
+      setDoctors(doctorData);
+    } else {
+      showErrorToast(responseDoctors.data.message);
+      setSelectedDoctor("");
+      setDate(undefined);
+    }
   };
 
   const handleSelectDoctor = (e: React.ChangeEvent<HTMLSelectElement>) => {

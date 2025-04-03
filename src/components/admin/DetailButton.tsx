@@ -41,7 +41,7 @@ const DetailButton: React.FC<DetailButtonProps> = ({
         showSuccessToast(response.data.message);
         setTabId(tabIdFromSidebar);
       } else {
-        showErrorToast(response.data.message);
+        showErrorToast(response);
       }
     }
     onClose();
@@ -175,6 +175,7 @@ const DetailButton: React.FC<DetailButtonProps> = ({
                         : data?.[row.accessor] || ""
                     }
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
               ))}

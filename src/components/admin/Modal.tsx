@@ -56,6 +56,10 @@ let Modal: React.FC<ModalProps> = ({
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCategory(e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      category: e.target.value,
+    }));
   };
 
   const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -89,10 +93,14 @@ let Modal: React.FC<ModalProps> = ({
       let response = "";
 
       if (typeModal === "comestic") {
-        dataToSend.category = category;
+        //dataToSend.category = category;
+        if (dataToSend.image && typeof dataToSend.image === "string") {
+          dataToSend.image =
+            dataToSend.image.split("\\").pop() || dataToSend.image;
+        }
 
         response = await ComesticAPI.addComestic(
-          formData as unknown as Comestic
+          dataToSend as unknown as Comestic
         );
       } else if (typeModal === "treatment") {
         response = await TreatmentAPI.add(dataToSend as unknown as Treatment);
@@ -150,35 +158,33 @@ let Modal: React.FC<ModalProps> = ({
                           <label htmlFor={row.accessor} className="form-label">
                             {row.header}
                           </label>
-                          <input
-                            type={row.type}
-                            className="form-control"
-                            id={row.accessor}
-                            value={formData[row.accessor] || ""}
-                            onChange={handleInputChange}
-                            required
-                          />
+                          {row.accessor === "category" ? (
+                            <select
+                              className="form-control"
+                              id={row.accessor}
+                              value={category}
+                              onChange={handleCategoryChange}
+                              required
+                            >
+                              <option value="" disabled>
+                                Chọn phân loại
+                              </option>
+                              <option value="cleanser">Sữa rửa mặt</option>
+                              <option value="makeup_remover">Tẩy trang</option>
+                              <option value="mask">Mặt nạ</option>
+                            </select>
+                          ) : (
+                            <input
+                              type={row.type}
+                              className="form-control"
+                              id={row.accessor}
+                              value={formData[row.accessor] || ""}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          )}
                         </div>
                       ))}
-                      <div className="mb-3">
-                        <label htmlFor="category" className="form-label">
-                          Phân loại
-                        </label>
-                        <select
-                          className="form-control"
-                          id="category"
-                          value={category}
-                          onChange={handleCategoryChange}
-                          required
-                        >
-                          <option value="" disabled>
-                            Chọn phân loại
-                          </option>
-                          <option value="cleanser">Sữa rửa mặt</option>
-                          <option value="makeup_remover">Tẩy trang</option>
-                          <option value="mask">Mặt nạ</option>
-                        </select>
-                      </div>
                     </>
                   );
                 } else if (
