@@ -55,7 +55,7 @@ const AppointmentForm = () => {
     } else {
       showErrorToast(responseDoctors.data.message);
       setSelectedDoctor("");
-      setDate(undefined);
+      //setDate(undefined);
     }
   };
 

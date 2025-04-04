@@ -1,7 +1,7 @@
 import styles from "../../assets/customer/payment/style.module.css";
 import CityAPI from "../../api/city.api";
 import { useEffect, useState } from "react";
-import { replace, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import UserAPI from "../../api/user.api";
 import OrderApi from "../../api/oder.api";
@@ -91,11 +91,11 @@ const Payment = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [pointToUse, setPointToUse] = useState<number>(0);
   const [pointError, setPointError] = useState<string>("");
-  const [discountLevel, setDiscountLevel] = useState<number>(0);
   let [shippingFee, setShippingFee] = useState<number>(0);
   let [totalAmount, setTotalAmount] = useState<number>(0);
   const [address, setAddress] = useState<string>("");
-  const [formData, setFormData] = useState<FormData>();
+  const [isSuccessfullyPayment, setIsSuccessfullyPayment] =
+    useState<boolean>(false);
 
   const handlePaymentMethod = (method: string) => {
     setPaymentMethod(method);
@@ -283,6 +283,7 @@ const Payment = () => {
 
     if (orderToAdd.status === 201) {
       showSuccessToast(orderToAdd.data.message);
+      setIsSuccessfullyPayment(true);
     } else {
       showErrorToast(orderToAdd.data.message);
     }
@@ -305,7 +306,47 @@ const Payment = () => {
       break;
   }
 
-  return (
+  const displaySuccessfullyPayment = () => {
+    return (
+      <div className="container py-5">
+        <div className="card border-0 shadow-sm p-5 text-center">
+          <div className="mb-4">
+            <i
+              className="bi bi-check-circle-fill text-success"
+              style={{ fontSize: "5rem" }}
+            ></i>
+          </div>
+          <h2 className="fw-bold text-success mb-3">Thanh toán thành công!</h2>
+          <p className="fs-5 mb-4">
+            Cảm ơn quý khách đã mua sản phẩm của OSKIN.
+          </p>
+          <div className="bg-light p-4 rounded mb-4">
+            <p className="mb-1 fs-6">
+              Tổng thanh toán:{" "}
+              <span className="fw-bold text-danger">
+                {finalAmount.toLocaleString()} đ
+              </span>
+            </p>
+            <p className="mb-0 fs-6">
+              Phương thức thanh toán:{" "}
+              <span className="fw-bold">
+                {paymentMethod === "at_store"
+                  ? "Nhận tại cửa hàng"
+                  : "Vận chuyển"}
+              </span>
+            </p>
+          </div>
+          <div className="d-flex justify-content-center gap-3">
+            <Link to="/" className="btn btn-outline-primary px-4">
+              Quay về trang chủ
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return !isSuccessfullyPayment ? (
     <div className={styles.thanhtoan}>
       <div className={styles.frame22}>
         <div className={styles.sanpham}>Sản phẩm:</div>
@@ -424,6 +465,8 @@ const Payment = () => {
         </div>
       </div>
     </div>
+  ) : (
+    displaySuccessfullyPayment()
   );
 };
 
