@@ -192,7 +192,7 @@ const SignInForm = () => {
                     </select>
                   </div>
                   <div className="d-grid gap-2">
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-danger">
                       Đăng ký
                     </button>
                     <button

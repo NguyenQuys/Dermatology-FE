@@ -38,6 +38,17 @@ class UserAPI {
       return error.response || "Đã xảy ra lỗi!";
     }
   }
+
+  async getCustomerByName(name: string) {
+    try {
+      const response = await axios.post(`${API_USER_URL}/getCustomerByName`, {
+        customer_name: name,
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
 
 export default new UserAPI();

@@ -45,6 +45,18 @@ class AppointmentAPI {
       return error.response;
     }
   }
+
+  async addByPharmacist(appointment?: any) {
+    try {
+      const response = await axios.post(
+        `${API_APPOINTMENT_URL}/addByPharmacist`,
+        appointment
+      );
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
 
 export default new AppointmentAPI();

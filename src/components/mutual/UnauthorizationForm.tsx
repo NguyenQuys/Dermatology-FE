@@ -11,7 +11,7 @@ const UnauthorizationForm = () => {
         boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
       }}
     >
-      <h1 className="text-danger fw-bold">Lỗi 401!!</h1>
+      <h1 className="text-danger fw-bold">Lỗi 403!!</h1>
       <h2 className="text-dark text-center">
         🚫 Opps! Bạn không có quyền truy cập vào trang này
       </h2>

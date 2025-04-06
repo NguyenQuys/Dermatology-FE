@@ -9,6 +9,7 @@ import Examination from "../doctor/Examination";
 import Queue from "../mutual/AppointmentQueue";
 import AppointmentPharmacist from "../mutual/AppointmentPharmacist";
 import Statistics from "./Statistics";
+import SetAppointment from "../pharmacist/SetAppointment";
 
 export let tabIdFromSidebar = "";
 let sidebarUpdateCallback: ((customerId?: string) => void) | null = null;
@@ -62,6 +63,8 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
       } else if (tabId === "nav-examination-tab") {
         getColumns();
       } else if (tabId === "nav-appointment-tab") {
+        getColumns();
+      } else if (tabId === "nav-set-appointment-tab") {
         getColumns();
       } else if (tabId === "nav-statistics-tab") {
         getColumns();
@@ -164,6 +167,8 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
     contentToRender = <AppointmentPharmacist />;
   } else if (activeTab === "nav-statistics-tab") {
     contentToRender = <Statistics />;
+  } else if (activeTab === "nav-set-appointment-tab") {
+    contentToRender = <SetAppointment />;
   }
 
   // return roles components
@@ -385,6 +390,19 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
                 onClick={() => handleTabClick("nav-appointment-tab")}
               >
                 <span className="menu-title">Cuộc hẹn</span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className={`nav-link ${
+                  activeTab === "nav-set-appointment-tab"
+                    ? "bg-primary text-white"
+                    : ""
+                }`}
+                href="#"
+                onClick={() => handleTabClick("nav-set-appointment-tab")}
+              >
+                <span className="menu-title">Đặt lịch hẹn</span>
               </a>
             </li>
 
