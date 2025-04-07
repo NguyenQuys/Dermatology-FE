@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import * as services from "../../api/general.api";
 import DataTable from "./DataTable";
 import AddButton from "./AddButton";
-import ScheduleAPI from "../../api/schedule.api";
 import { useAuth } from "../../hooks/useAuth";
 import Calendar from "../mutual/Calendar";
 import Examination from "../doctor/Examination";

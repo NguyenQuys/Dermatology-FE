@@ -73,7 +73,7 @@ const AppointmentForm = () => {
 
     try {
       let response = await AppointmentAPI.createAppointment(entity);
-      if (response.status === 200) {
+      if (response.status === 201) {
         showSuccessToast(response.data.message || "Đặt lịch thành công!");
         setIsSubmitted(true);
       } else {

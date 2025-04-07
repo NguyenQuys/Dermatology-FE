@@ -37,6 +37,15 @@ class TreatmentAPI {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
     }
   }
+
+  async delete(_id: string) {
+    try {
+      const response = await axios.delete(`${API_TREATMENT_URL}/delete/${_id}`);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
 
 export default new TreatmentAPI();

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import DetailButton from "./DetailButton";
-import { tabIdFromSidebar } from "./Sidebar";
+import { tabIdFromSidebar, setTabId } from "./Sidebar";
 import comesticApi from "../../api/comestic.api";
+import medicineApi from "../../api/medicine.api";
+import userApi from "../../api/user.api";
+import { showSuccessToast, showErrorToast } from "../../utils/toast.util";
+import treatmentApi from "../../api/treatment.api";
 
 interface Column {
   header: string;
@@ -40,6 +44,41 @@ const DataTable: React.FC<DataTableProps> = ({
     setOpenModalIndex(null);
   };
 
+  const handleDelete = async (id: string) => {
+    let response = null;
+    if (confirm("Xác nhận xóa?")) {
+      switch (tabIdFromSidebar) {
+        case "nav-doctor-tab":
+        case "nav-customer-tab":
+        case "nav-pharmacist-tab":
+          response = await userApi.delete(id);
+          if (response.status === 200) {
+            showSuccessToast(response.data.message);
+            setTabId(tabIdFromSidebar);
+          } else {
+            showErrorToast(response.data.message);
+          }
+          break;
+        case "nav-medicine-tab":
+          response = await medicineApi.delete(id);
+          if (response.status === 200) {
+            showSuccessToast(response.data.message);
+            setTabId(tabIdFromSidebar);
+          } else {
+            showErrorToast(response.data.message);
+          }
+          break;
+        case "nav-treatment-tab":
+          response = await treatmentApi.delete(id);
+          if (response.status === 200) {
+            showSuccessToast(response.data.message);
+            setTabId(tabIdFromSidebar);
+          }
+          break;
+      }
+    }
+  };
+
   if (!columns || columns.length === 0) {
     return <div>Không có dữ liệu để hiển thị</div>;
   }
@@ -54,10 +93,8 @@ const DataTable: React.FC<DataTableProps> = ({
                 {column.header}
               </th>
             ))}
-            {tabIdFromSidebar === "nav-medicine-tab" ||
-            tabIdFromSidebar === "nav-treatment-tab"
-              ? ""
-              : actions && <th className="bg-primary text-white">Hành động</th>}
+
+            {actions && <th className="bg-primary text-white">Hành động</th>}
           </tr>
         </thead>
         <tbody>
@@ -80,16 +117,24 @@ const DataTable: React.FC<DataTableProps> = ({
                       : item[column.accessor]}
                   </td>
                 ))}
-                {tabIdFromSidebar === "nav-medicine-tab" ||
-                tabIdFromSidebar === "nav-treatment-tab" ? (
-                  ""
-                ) : (
+                {actions && (
                   <td>
+                    {tabIdFromSidebar === "nav-treatment-tab" ||
+                    tabIdFromSidebar === "nav-medicine-tab" ? (
+                      ""
+                    ) : (
+                      <button
+                        className="btn btn-info text-white"
+                        onClick={() => handleOpenModal(index)}
+                      >
+                        Chi tiết
+                      </button>
+                    )}
                     <button
-                      className="btn btn-info"
-                      onClick={() => handleOpenModal(index)}
+                      className="btn btn-danger mx-2"
+                      onClick={() => handleDelete(item._id)}
                     >
-                      Chi tiết
+                      Xóa
                     </button>
 
                     {/* Modal is only rendered when its index matches the open one */}

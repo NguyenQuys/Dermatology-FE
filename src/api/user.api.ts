@@ -49,6 +49,15 @@ class UserAPI {
       return error.response;
     }
   }
+
+  async delete(id: string) {
+    try {
+      const response = await axios.delete(`${API_USER_URL}/delete/${id}`);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
 
 export default new UserAPI();
