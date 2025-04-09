@@ -62,6 +62,15 @@ class ComesticAPI {
       return error.response?.data?.message || "Đã xảy ra lỗi!";
     }
   }
+
+  async delete(_id: string) {
+    try {
+      const response = await axios.delete(`${API_COMESTIC_URL}/delete/${_id}`);
+      return response;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
 }
 
 export default new ComesticAPI();

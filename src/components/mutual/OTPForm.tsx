@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import * as showNotification from "../../utils/toast.util";
+import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
 import { useOtpAPI } from "../../api/otp.api";
 import { useNavigate } from "react-router-dom";
 
 const OTPForm = () => {
-  const { verifyOtp } = useOtpAPI();
+  const { verifyOtp, resendOtp } = useOtpAPI();
   const [otpCode, setOtpCode] = useState("");
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(5);
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
 
@@ -21,17 +21,26 @@ const OTPForm = () => {
     }
   }, [countdown]);
 
+  const handleResendOtp = async () => {
+    const response = await resendOtp();
+    if (response.status === 200) {
+      showSuccessToast("Mã OTP đã được gửi lại qua email của bạn");
+    } else {
+      showErrorToast(response.data.message);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otpCode) {
-      showNotification.showErrorToast("Vui lòng nhập mã OTP!");
+      showErrorToast("Vui lòng nhập mã OTP!");
       return;
     }
 
     try {
       const response = await verifyOtp(otpCode);
       if (response.status === 200) {
-        showNotification.showSuccessToast(response.data.message);
+        showSuccessToast(response.data.message);
         switch (response.data.role) {
           case "doctor":
             navigate("/doctor");
@@ -46,11 +55,10 @@ const OTPForm = () => {
             navigate("/");
         }
       } else {
-        showNotification.showErrorToast(response.data.message);
+        showErrorToast(response.data.message);
       }
     } catch (error) {
-      console.log(error);
-      showNotification.showErrorToast("Xác thực thất bại, vui lòng thử lại!");
+      showErrorToast("Xác thực thất bại, vui lòng thử lại!");
     }
   };
 
@@ -78,9 +86,8 @@ const OTPForm = () => {
         <button
           className="btn btn-primary w-100 mt-3"
           onClick={() => {
-            showNotification.showSuccessToast("Mã OTP mới đã được gửi!");
-            setCountdown(10);
-            setCanResend(false);
+            setCountdown(5);
+            handleResendOtp();
           }}
         >
           Gửi lại mã OTP

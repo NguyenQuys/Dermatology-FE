@@ -20,5 +20,16 @@ export const useOtpAPI = () => {
     }
   };
 
-  return { verifyOtp };
+  const resendOtp = async () => {
+    try {
+      const response = await axios.post(`${API_OTP_URL}/resendOTP`);
+      return response;
+    } catch (error: any) {
+      throw Object.assign(new Error(error.response), {
+        status: 401,
+      });
+    }
+  };
+
+  return { verifyOtp, resendOtp };
 };

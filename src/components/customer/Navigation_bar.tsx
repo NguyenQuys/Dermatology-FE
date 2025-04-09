@@ -10,10 +10,12 @@ const Navigation_bar = () => {
   const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    logout();
-    setIsOpen(false);
-    navigate("/");
-    window.location.reload();
+    if (confirm("Bạn có muốn đăng xuất không?")) {
+      logout();
+      setIsOpen(false);
+      navigate("/");
+      window.location.reload();
+    }
   };
 
   const toggleDropdown = () => {

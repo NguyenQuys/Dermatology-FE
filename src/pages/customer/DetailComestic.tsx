@@ -7,6 +7,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
 import ReviewApi from "../../api/review.api";
 
+const IMAGE_URL = "http://localhost:5000/uploads/";
+
 interface Review {
   _id: string;
   customer_id: string;
@@ -152,7 +154,7 @@ const DetailComestic: React.FC = () => {
             <div className="main-image mb-3">
               <img
                 style={{ height: "310px", width: "100%", objectFit: "cover" }}
-                src={comestic.image}
+                src={`${IMAGE_URL}/${comestic.image}`}
                 alt={comestic.name}
                 className="img-fluid rounded"
               />

@@ -5,13 +5,15 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 function NavigationBar() {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
-    window.location.reload();
+    if (confirm("Bạn có muốn đăng xuất không?")) {
+      logout();
+      navigate("/");
+      window.location.reload();
+    }
   };
 
   return (
@@ -39,36 +41,15 @@ function NavigationBar() {
         <ul className="navbar-nav">
           <li className="nav-item font-weight-semibold d-none d-lg-block ms-0">
             <h1 className="welcome-text">
-              Good Morning, <span className="text-black fw-bold">John Doe</span>
+              Good Morning,{" "}
+              <span className="text-black fw-bold">{user.name}</span>
             </h1>
             <h3 className="welcome-sub-text">
-              Your performance summary this week{" "}
+              Role: <span className="text-black fw-bold">{user.role}</span>
             </h3>
           </li>
         </ul>
         <ul className="navbar-nav ms-auto">
-          <li className="nav-item dropdown d-none d-lg-block p-3">
-            <a
-              className="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split"
-              id="messageDropdown"
-              href="#"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {" "}
-              Select Category{" "}
-            </a>
-            <div
-              className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
-              aria-labelledby="messageDropdown"
-            >
-              <a className="dropdown-item py-3">
-                <p className="mb-0 font-weight-medium float-left">
-                  Select category
-                </p>
-              </a>
-            </div>
-          </li>
           <li>
             <a onClick={handleLogout} style={{ cursor: "pointer" }}>
               Đăng xuất

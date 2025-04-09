@@ -282,7 +282,8 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
         <div className="container p-3">
           <div className="col-lg-12">
             {activeTab !== "" ? (
-              activeTab !== "nav-customer-tab" ? (
+              activeTab !== "nav-customer-tab" &&
+              activeTab !== "nav-statistics-tab" ? (
                 <AddButton type={activeTab} handleTabClick={handleTabClick} />
               ) : null
             ) : (

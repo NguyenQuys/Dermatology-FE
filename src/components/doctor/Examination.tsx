@@ -321,15 +321,6 @@ const Examination: React.FC<ExaminationProps> = ({
                                       style={{ cursor: "pointer" }}
                                     >
                                       <div className="d-flex align-items-center">
-                                        <img
-                                          src={product.image}
-                                          alt={product.name}
-                                          className="rounded-circle me-2"
-                                          style={{
-                                            width: "30px",
-                                            height: "30px",
-                                          }}
-                                        />
                                         {product.name}
                                       </div>
                                     </li>
@@ -404,7 +395,7 @@ const Examination: React.FC<ExaminationProps> = ({
                   ))}
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="btn btn-primary"
                     onClick={addPrescription}
                   >
                     + Thêm đơn thuốc
@@ -425,7 +416,7 @@ const Examination: React.FC<ExaminationProps> = ({
 
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-success"
                   disabled={loading}
                 >
                   Lưu hồ sơ

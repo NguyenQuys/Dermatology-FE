@@ -75,6 +75,13 @@ const DataTable: React.FC<DataTableProps> = ({
             setTabId(tabIdFromSidebar);
           }
           break;
+        case "nav-comestic-tab":
+          response = await comesticApi.delete(id);
+          if (response.status === 200) {
+            showSuccessToast(response.data.message);
+            setTabId(tabIdFromSidebar);
+          }
+          break;
       }
     }
   };

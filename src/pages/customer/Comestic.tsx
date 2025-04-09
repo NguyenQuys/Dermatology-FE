@@ -4,6 +4,8 @@ import "/src/assets/customer/comestic/css/vars.css";
 import comesticApi from "../../api/comestic.api";
 import { Link } from "react-router-dom";
 
+const IMAGE_URL = "http://localhost:5000/uploads/";
+
 const Comestic: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -82,7 +84,7 @@ const Comestic: React.FC = () => {
                       <div className="d-flex align-items-center">
                         <img
                           className="rounded-circle me-3"
-                          src={product.image}
+                          src={`${IMAGE_URL}/${product.image}`}
                           alt="Add to cart"
                           style={{ width: "50px", height: "50px" }}
                         />
@@ -122,7 +124,7 @@ const Comestic: React.FC = () => {
               >
                 <img
                   className={styles.frame6}
-                  src={comestic.image}
+                  src={`${IMAGE_URL}/${comestic.image}`}
                   alt={comestic.name}
                 />
                 <div className={styles.frame7}>
