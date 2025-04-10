@@ -7,6 +7,8 @@ import UserAPI from "../../api/user.api";
 import OrderApi from "../../api/oder.api";
 import { showErrorToast, showSuccessToast } from "../../utils/toast.util";
 
+const IMAGE_URL = "http://localhost:5000/uploads/";
+
 interface Province {
   code: string;
   name: string;
@@ -53,7 +55,7 @@ const ProductItem = ({ product }: { product: CartItem }) => {
             className="rounded-4"
             width={150}
             height={200}
-            src={product.comestic_image}
+            src={`${IMAGE_URL}/${product.comestic_image}`}
             alt={product.comestic_name}
           />
         </div>

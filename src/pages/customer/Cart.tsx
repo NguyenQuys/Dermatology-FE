@@ -5,6 +5,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import { showSuccessToast, showErrorToast } from "../../utils/toast.util";
 
+const IMAGE_URL = "http://localhost:5000/uploads/";
+
 interface CartItem {
   _id: string;
   comestic_id: string;
@@ -129,7 +131,7 @@ const Cart: React.FC = () => {
                   <div className="col-md-2">
                     <img
                       alt={item.comestic_name}
-                      src={item.comestic_image}
+                      src={`${IMAGE_URL}/${item.comestic_image}`}
                       className="img-fluid rounded"
                       style={{
                         width: "100px",

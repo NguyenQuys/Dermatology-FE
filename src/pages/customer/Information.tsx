@@ -19,7 +19,7 @@ const Information = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user?.id) return; // Kiểm tra nếu user chưa load xong
+    if (!user?.id) return;
 
     const fetchUserData = async () => {
       try {
@@ -190,7 +190,7 @@ const Information = () => {
                         Chi tiết
                       </button>
                       <button
-                        className="btn btn-primary"
+                        className="btn btn-primary mx-2"
                         onClick={() => handleExportPDF(record._id)}
                       >
                         Xuất bệnh án
