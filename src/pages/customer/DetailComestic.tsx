@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, data } from "react-router-dom";
+import { useParams, useNavigate, data, Link } from "react-router-dom";
 import comesticApi from "../../api/comestic.api";
 import CartApi from "../../api/cart.api";
 import { ShoppingCart } from "lucide-react";
@@ -36,10 +36,26 @@ interface ReviewToAdd {
   rating: number;
 }
 
+interface Product {
+  comestic_id: string;
+  comestic_image: string;
+  price: number;
+  quantity: number;
+  comestic_name: string;
+}
+
+interface Product {
+  comestic_id: string;
+  comestic_image: string;
+  price: number;
+  quantity: number;
+  comestic_name: string;
+}
+
 const DetailComestic: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [comestic, setComestic] = useState<Comestic | null>(null);
   const [loading, setLoading] = useState(true);
@@ -212,7 +228,25 @@ const DetailComestic: React.FC = () => {
           </div>
 
           <div className="d-grid gap-2 d-flex justify-content-start">
-            <button className="btn btn-success">MUA NGAY</button>
+            <Link
+              to="/payment"
+              state={{
+                cartData: {
+                  customer_id: user.id,
+                  items: [
+                    {
+                      comestic_id: id,
+                      comestic_image: comestic.image,
+                      price: comestic.price,
+                      quantity: quantity,
+                      comestic_name: comestic.name,
+                    },
+                  ],
+                },
+              }}
+            >
+              <button className="btn btn-success">MUA NGAY</button>
+            </Link>
 
             <button className="btn btn-primary" onClick={handleAddToCart}>
               Thêm vào giỏ hàng

@@ -29,21 +29,10 @@ interface CartItem {
 }
 
 interface CartData {
-  _id: string;
+  _id?: string;
   customer_id: string;
   items: CartItem[];
   type: string;
-}
-
-interface FormData {
-  customer_id: string;
-  items: any[];
-  total_amount: Number;
-  final_amount: Number;
-  address: string;
-  order_id: string;
-  points_used: Number;
-  payment_method: string;
 }
 
 const ProductItem = ({ product }: { product: CartItem }) => {
@@ -67,11 +56,17 @@ const ProductItem = ({ product }: { product: CartItem }) => {
               </span>
             </div>
             <div className={styles.price}>
-              Giá bán: {product.price.toLocaleString()} đ
+              Giá bán:{" "}
+              <span className="text-danger fw-bold">
+                {product.price.toLocaleString()} đ
+              </span>
             </div>
             <div className={styles.quantity}>Số lượng: {product.quantity}</div>
             <div className={styles.totalPrice}>
-              Số tiền: {(product.price * product.quantity).toLocaleString()} đ
+              Số tiền:{" "}
+              <span className="text-danger fw-bold">
+                {(product.price * product.quantity).toLocaleString()} đ
+              </span>
             </div>
           </div>
         </div>
