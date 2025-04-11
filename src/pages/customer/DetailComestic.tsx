@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, data, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import comesticApi from "../../api/comestic.api";
 import CartApi from "../../api/cart.api";
 import { ShoppingCart } from "lucide-react";
@@ -53,7 +53,7 @@ interface Product {
 }
 
 const DetailComestic: React.FC = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const [quantity, setQuantity] = useState(1);
@@ -69,7 +69,7 @@ const DetailComestic: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await comesticApi.getComesticById(id as string);
+      const response = await comesticApi.getComesticBySlug(slug as string);
 
       setComestic(response.data);
     } catch (error) {
@@ -81,10 +81,19 @@ const DetailComestic: React.FC = () => {
   };
 
   useEffect(() => {
-    if (id) {
+    if (slug) {
       fetchComestic();
     }
-  }, [id]);
+  }, [slug]);
+
+  const handleToSignIn = () => {
+    if (!user) {
+      if (confirm("Bạn cần đăng nhập để tiếp tục")) {
+        navigate("/login");
+        return;
+      }
+    }
+  };
 
   const handleQuantityChange = (type: "increase" | "decrease") => {
     if (type === "increase") {
@@ -102,7 +111,7 @@ const DetailComestic: React.FC = () => {
 
     if (!comestic) return;
 
-    const response = await CartApi.add(id as string, quantity);
+    const response = await CartApi.add(comestic._id, quantity);
     if (response.status === 201) {
       showSuccessToast(response.data.message);
     } else {
@@ -114,7 +123,7 @@ const DetailComestic: React.FC = () => {
     event.preventDefault();
     try {
       const response = await ReviewApi.add({
-        comestic_id: id,
+        comestic_id: comestic?._id as string,
         comment: review.comment,
         rating: review.rating,
       });
@@ -228,29 +237,41 @@ const DetailComestic: React.FC = () => {
           </div>
 
           <div className="d-grid gap-2 d-flex justify-content-start">
-            <Link
-              to="/payment"
-              state={{
-                cartData: {
-                  customer_id: user.id,
-                  items: [
-                    {
-                      comestic_id: id,
-                      comestic_image: comestic.image,
-                      price: comestic.price,
-                      quantity: quantity,
-                      comestic_name: comestic.name,
-                    },
-                  ],
-                },
-              }}
-            >
-              <button className="btn btn-success">MUA NGAY</button>
-            </Link>
+            {user ? (
+              <Link
+                to="/payment"
+                state={{
+                  cartData: {
+                    customer_id: user?.id,
+                    items: [
+                      {
+                        comestic_id: comestic._id,
+                        comestic_image: comestic.image,
+                        price: comestic.price,
+                        quantity: quantity,
+                        comestic_name: comestic.name,
+                      },
+                    ],
+                  },
+                }}
+              >
+                <button className="btn btn-success">MUA NGAY</button>
+              </Link>
+            ) : (
+              <button className="btn btn-success" onClick={handleToSignIn}>
+                MUA NGAY
+              </button>
+            )}
 
-            <button className="btn btn-primary" onClick={handleAddToCart}>
-              Thêm vào giỏ hàng
-            </button>
+            {user ? (
+              <button className="btn btn-primary" onClick={handleAddToCart}>
+                Thêm vào giỏ hàng
+              </button>
+            ) : (
+              <button className="btn btn-primary" onClick={handleToSignIn}>
+                Thêm vào giỏ hàng
+              </button>
+            )}
           </div>
         </div>
       </div>

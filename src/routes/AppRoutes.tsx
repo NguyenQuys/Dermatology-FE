@@ -26,7 +26,8 @@ const AppRoutes = () => {
         <Route path="/login" element={<SignInForm />} />
         <Route path="/verifyOtp" element={<OTPForm />} />
         <Route path="/comestic" element={<Comestic />} />
-        <Route path="/comestic/:id" element={<DetailComestic />} />
+        <Route path="/comestic/getById/:id" element={<DetailComestic />} />
+        <Route path="/comestic/getBySlug/:slug" element={<DetailComestic />} />
         <Route path="/appointment" element={<AppointmentForm />} />
         <Route path="/unauthorized" element={<UnauthorizationForm />} />
         <Route path="/information" element={<Information />} />

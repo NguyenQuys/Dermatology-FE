@@ -77,7 +77,7 @@ const Comestic: React.FC = () => {
                     className="list-group-item d-flex justify-content-between w-100"
                   >
                     <Link
-                      to={`/comestic/${product._id}`}
+                      to={`/comestic/${product.slug}`}
                       className="text-decoration-none text-dark d-flex justify-content-between align-items-center"
                       style={{ width: "100%" }}
                     >
@@ -118,7 +118,7 @@ const Comestic: React.FC = () => {
           <div className={styles.skinType}>
             {data.map((comestic) => (
               <Link
-                to={`/comestic/${comestic._id}`}
+                to={`/comestic/getBySlug/${comestic.slug}`}
                 className={styles.snp3}
                 key={comestic._id}
               >

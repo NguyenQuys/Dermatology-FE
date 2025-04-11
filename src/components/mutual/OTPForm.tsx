@@ -73,7 +73,7 @@ const OTPForm = () => {
           value={otpCode}
           onChange={(e) => setOtpCode(e.target.value)}
         />
-        <div className="countdown-timer">
+        <div className="mt-3 countdown-timer">
           {countdown > 0
             ? `Gửi lại mã sau: ${countdown}s`
             : "Bạn có thể gửi lại mã OTP!"}

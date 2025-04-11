@@ -25,18 +25,20 @@ const SignInForm = () => {
     gender: "",
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password) {
       showNotification.showErrorToast("Vui lòng nhập đầy đủ thông tin!");
+      setLoading(false);
       return;
     }
 
     const response = await AuthAPI.login(username, password);
     if (response.status === 200) {
       showNotification.showSuccessToast(response.data.message);
-
+      console.log(response.data.message);
       navigate("/verifyOtp");
     } else {
       showNotification.showErrorToast(response.data.message);
@@ -100,10 +102,17 @@ const SignInForm = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-danger w-100">
+        <button
+          type="submit"
+          className="btn btn-danger w-100"
+          onClick={() => setLoading(true)}
+        >
           ĐĂNG NHẬP
         </button>
-        <h5 className="mt-4">
+        {loading && (
+          <div className="mt-4 spinner-grow text-danger" role="status"></div>
+        )}
+        <h5 className="mt-2">
           Bạn chưa có tài khoản?
           <a
             className="text-danger btn btn-link fw-bold "

@@ -40,6 +40,15 @@ class ComesticAPI {
     }
   }
 
+  async getComesticBySlug(slug: string) {
+    try {
+      const response = await axios.get(`${API_COMESTIC_URL}/getBySlug/${slug}`);
+      return response;
+    } catch (error: any) {
+      return error.response?.data?.message || "Đã xảy ra lỗi!";
+    }
+  }
+
   async searchByName(name: string) {
     try {
       const response = await axios.post(`${API_COMESTIC_URL}/searchByName`, {
