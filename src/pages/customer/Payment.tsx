@@ -348,7 +348,7 @@ const Payment = () => {
       <div className={styles.frame22}>
         <div className={styles.sanpham}>Sản phẩm:</div>
         {cartData?.items.map((product) => (
-          <ProductItem key={product._id} product={product} />
+          <ProductItem key={product.comestic_id} product={product} />
         ))}
 
         <div className={styles.frame25}>

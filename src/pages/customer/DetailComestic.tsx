@@ -250,6 +250,7 @@ const DetailComestic: React.FC = () => {
                         price: comestic.price,
                         quantity: quantity,
                         comestic_name: comestic.name,
+                        type: "comestic",
                       },
                     ],
                   },
