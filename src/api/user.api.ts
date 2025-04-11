@@ -50,6 +50,15 @@ class UserAPI {
     }
   }
 
+  async update(id: string, user: User) {
+    try {
+      const response = await axios.put(`${API_USER_URL}/update/${id}`, user);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
   async delete(id: string) {
     try {
       const response = await axios.delete(`${API_USER_URL}/delete/${id}`);

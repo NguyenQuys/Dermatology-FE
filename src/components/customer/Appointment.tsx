@@ -38,6 +38,7 @@ const AppointmentForm = () => {
 
   const handleSelectDate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const dateToSelect = new Date(e.target.value);
+    console.log(dateToSelect);
     setDate(dateToSelect);
 
     const year = dateToSelect.getFullYear();
@@ -104,9 +105,10 @@ const AppointmentForm = () => {
               <div className="mb-3">
                 <label className="form-label">Ngày và giờ khám:</label>
                 <input
-                  type="datetime-local"
+                  type="date"
                   className="form-control"
                   onChange={handleSelectDate}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </div>
               <div className="mb-3">

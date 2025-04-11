@@ -43,6 +43,15 @@ const DetailButton: React.FC<DetailButtonProps> = ({
       } else {
         showErrorToast(response);
       }
+    } else if (
+      tabIdFromSidebar === "nav-doctor-tab" ||
+      tabIdFromSidebar === "nav-pharmacist-tab"
+    ) {
+      const response = await UserAPI.update(idItem, data);
+      if (response.status === 200) {
+        showSuccessToast(response.data.message);
+        setTabId(tabIdFromSidebar);
+      }
     }
     onClose();
   };
