@@ -405,36 +405,6 @@ const Sidebar: React.FC<SidebarProps> = ({ tabId }) => {
                 <span className="menu-title">Đặt lịch hẹn</span>
               </a>
             </li>
-
-            <li className="nav-item nav-category">Lịch làm việc</li>
-
-            <li className="nav-item">
-              <a
-                className={`nav-link ${
-                  activeTab === "nav-medicine-tab"
-                    ? "bg-primary text-white"
-                    : ""
-                }`}
-                href="#"
-                onClick={() => handleTabClick("nav-medicine-tab")}
-              >
-                <span className="menu-title">Xem lịch</span>
-              </a>
-            </li>
-
-            <li className="nav-item">
-              <a
-                className={`nav-link ${
-                  activeTab === "nav-register-schedule-tab"
-                    ? "bg-primary text-white"
-                    : ""
-                }`}
-                href="#"
-                onClick={() => handleTabClick("nav-register-schedule-tab")}
-              >
-                <span className="menu-title">Đăng ký lịch</span>
-              </a>
-            </li>
           </ul>
         </nav>
         <div className="container p-3">
